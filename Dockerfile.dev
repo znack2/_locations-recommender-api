@@ -1,0 +1,3 @@
+FROM node:12
+
+USER node

@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  locations-recommender-api:
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+    ports:
+      - "3000:3000"
+      - "9230:9229"
+    volumes:
+      - yarn:/root/.cache/yarn
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: yarn start:debug
+    depends_on:
+      - locations-recommender-db
+
+  locations-recommender-db:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=locations_recommender
+    ports:
+      - 5432:5432
+
+volumes:
+  yarn:

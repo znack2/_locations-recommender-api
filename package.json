@@ -1,0 +1,41 @@
+{
+  "name": "locations-recommender-api",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "license": "MIT",
+  "dependencies": {
+    "config": "^3.3.0",
+    "express": "^4.17.1",
+    "knex": "^0.20.11",
+    "node-pg-migrate": "^4.2.2",
+    "p-retry": "^4.2.0",
+    "pg": "^7.18.2",
+    "superagent": "^5.2.2"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-import": "^2.20.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "lint-staged": "^10.0.4",
+    "nodemon": "^2.0.2",
+    "prettier": "^1.19.1"
+  },
+  "scripts": {
+    "start": "node src/app.js",
+    "start:debug": "nodemon src/app.js",
+    "migrate": "node-pg-migrate",
+    "test": "NODE_ENV=test jest -i --forceExit --testResultsProcessor jest-teamcity-reporter",
+    "lint": "eslint",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ]
+  }
+}
