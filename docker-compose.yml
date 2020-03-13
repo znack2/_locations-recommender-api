@@ -2,9 +2,7 @@ version: "3"
 
 services:
   locations-recommender-api:
-    build:
-      dockerfile: Dockerfile.dev
-      context: .
+    image: node:12
     ports:
       - "3000:3000"
       - "9230:9229"
@@ -12,6 +10,7 @@ services:
       - yarn:/root/.cache/yarn
       - .:/usr/src/app
     working_dir: /usr/src/app
+    entrypoint: ./entrypoint.sh
     command: yarn start:debug
     depends_on:
       - locations-recommender-db
