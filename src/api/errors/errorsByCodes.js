@@ -6,11 +6,32 @@ module.exports = {
       title: 'Authorization code required'
     }
   },
-  WRONG_AUTHORIZATION_CODE: {
+  INVALID_AUTHORIZATION_CODE: {
     statusCode: 400,
     data: {
       code: '40002',
       title: 'Invalid authorization code'
+    }
+  },
+  INVALID_PREFERENCE: {
+    statusCode: 400,
+    data: {
+      code: '40003',
+      title: 'Invalid preference'
+    }
+  },
+  PREFERENCE_ALREADY_EXISTS: {
+    statusCode: 400,
+    data: {
+      code: '40004',
+      title: 'Preference already exists'
+    }
+  },
+  PREFERENCE_DOESNT_EXIST: {
+    statusCode: 400,
+    data: {
+      code: '40005',
+      title: 'Preference doesn\'t exist'
     }
   },
   AUTHORIZATION_REQUIRED: {

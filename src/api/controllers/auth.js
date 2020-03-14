@@ -12,7 +12,7 @@ module.exports = {
 
       const accessToken = await instagram.getAccessToken(code);
       if (!accessToken) {
-        throw new ApiError('WRONG_AUTHORIZATION_CODE');
+        throw new ApiError('INVALID_AUTHORIZATION_CODE');
       }
 
       const instagramUser = await instagram.getUser(accessToken);

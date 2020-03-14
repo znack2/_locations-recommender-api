@@ -78,4 +78,5 @@ const generateModel = (table) => ({
 module.exports = {
   users: generateModel('users'),
   sessions: generateModel('sessions'),
+  userPreferences: generateModel('userPreferences')
 };
