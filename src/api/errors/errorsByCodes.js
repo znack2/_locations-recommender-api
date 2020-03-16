@@ -34,6 +34,13 @@ module.exports = {
       title: 'Preference doesn\'t exist'
     }
   },
+  RECOMMENDATION_ID_REQUIRED: {
+    statusCode: 400,
+    data: {
+      code: '40006',
+      title: 'Recommendation id required'
+    }
+  },
   AUTHORIZATION_REQUIRED: {
     statusCode: 401,
     data: {
