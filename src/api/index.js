@@ -18,22 +18,12 @@ module.exports = {
     //   res.end();
     // });
 
-    // app.use(express.static(path.join(__dirname,'../..'));
-          // res.sendFile(path.join(__dirname, "client", "index.html"));
-      // res.send("./ : ", path.resolve("./"));
-
-    // app.get('/', function(req, res) {
-    //   res.sendFile(path.join(__dirname, 'client', 'index.html'));
-    // });    
-
     app.get("/hello", function(req, res) {
        res.send({ hello: 'world' });
     });
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-
-    app.use(routes);
 
     app.use(express.static(path.join(__dirname, '..', '..', 'build')));
 
@@ -44,6 +34,8 @@ module.exports = {
     app.get("/callback", function(req, res) {
       res.sendFile(path.join(__dirname, '..', '..', 'build', 'index.html'));
     });
+
+    app.use(routes);
 
     app.use(errorHandler);
 

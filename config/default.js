@@ -31,7 +31,7 @@ module.exports = {
     instagram: {
       clientId: '476859443194257',
       clientSecret: 'cf981078ea609a35392daa5ae65f8aca',
-      clientRedirectUri: 'https://freshplan.ru/callback'
+      clientRedirectUri: 'https://secure.stayandsmile.com/callback'
     }
   }
 };
