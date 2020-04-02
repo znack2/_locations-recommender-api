@@ -22,16 +22,6 @@ module.exports = {
           // res.sendFile(path.join(__dirname, "client", "index.html"));
       // res.send("./ : ", path.resolve("./"));
 
-    app.use(express.static(path.join(__dirname, '..', '..', 'build')));
-
-    app.get("/", function(req, res) {
-      res.sendFile(path.join(__dirname, '..', '..', 'build', 'index.html'));
-    });
-
-    app.get("/callback", function(req, res) {
-      res.sendFile(path.join(__dirname, '..', '..', 'build', 'index.html'));
-    });
-
     // app.get('/', function(req, res) {
     //   res.sendFile(path.join(__dirname, 'client', 'index.html'));
     // });    
@@ -44,6 +34,16 @@ module.exports = {
     app.use(express.urlencoded({ extended: true }));
 
     app.use(routes);
+
+    app.use(express.static(path.join(__dirname, '..', '..', 'build')));
+
+    app.get("/", function(req, res) {
+      res.sendFile(path.join(__dirname, '..', '..', 'build', 'index.html'));
+    });
+
+    app.get("/callback", function(req, res) {
+      res.sendFile(path.join(__dirname, '..', '..', 'build', 'index.html'));
+    });
 
     app.use(errorHandler);
 
