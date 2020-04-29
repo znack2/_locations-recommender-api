@@ -38,9 +38,11 @@ module.exports = {
 
       // const preference = 'клуб';
 
+      console.log('3','preferences',preferences);
+
       const tags = await searchTags(preferences);
 
-      console.log('3','preferences',tags);
+      console.log('3','tags',tags);
 
       //4) get ids from personalize
       const locationIds = await getRecomendations(preferences);
