@@ -76,7 +76,7 @@ async function searchTags(tags = []) {
               should: conditions
             },
           },
-          fields: ["_id"]
+          // fields: ["_id"]
        },
     },
     { ignore: [404] }
