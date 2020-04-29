@@ -45,7 +45,7 @@ module.exports = {
       console.log('3','tags',tags);
 
       //4) get ids from personalize
-      const locationIds = await getRecomendations(preferences);
+      const locationIds = await getRecomendations(tags[0].HashTag);
       console.log('4','locationIds',locationIds); 
 
       //5) get hashtag and type by location_id in location3
