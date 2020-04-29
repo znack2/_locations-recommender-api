@@ -22,6 +22,8 @@ module.exports = {
       // const userId = 1;
       console.log('1','userId',userId);
 
+      // currentLocation: {"lat":55.7501898,"lan":37.795363099999996}
+
       //2) get data
       const currentLocation = req.params.currentLocation;
       const categoryId = req.params.categoryId;
@@ -29,10 +31,12 @@ module.exports = {
       console.log('2','currentLocation',currentLocation);
       console.log('2','categoryId',categoryId);
 
-      //3) get preferences
+      // 3) get preferences
       const preferences = await models.userPreferences.find({ userId }, ['preference'])
         // .then(preferences => await searchTag(preferences));
         .then(preferences => preferences.map(({ preference }) => preference));
+
+      // const preference = 'клуб';
 
       const tags = await searchTags(preferences);
 
