@@ -25,8 +25,8 @@ module.exports = {
       // currentLocation: {"lat":55.7501898,"lan":37.795363099999996}
 
       //2) get data
-      const currentLocation = req.params.currentLocation;
-      const categoryId = req.params.categoryId;
+      const currentLocation = req.query.currentLocation;
+      const categoryId = req.query.categoryId;
 
       console.log('2','currentLocation',currentLocation);
       console.log('2','categoryId',categoryId);
