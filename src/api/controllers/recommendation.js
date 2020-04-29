@@ -85,7 +85,7 @@ module.exports = {
 
       const setLocationData = locationHashes => Promise.all(locationHashes.map(getLocationData));
 
-      const locationsData = await setLocationData(locationHash);
+      const locationsData = await setLocationData(locationHashes);
 
       console.log('8','locationsData',locationsData);
 
