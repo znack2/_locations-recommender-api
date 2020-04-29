@@ -16,6 +16,8 @@ module.exports = async (req, res, next) => {
       }
     }
 
+    // return next();
+
     next(new ApiError('AUTHORIZATION_REQUIRED'));
   } catch (error) {
     next(error);
