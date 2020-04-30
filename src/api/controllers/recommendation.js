@@ -28,7 +28,7 @@ module.exports = {
 
       //2) get data
       const currentLocation = req.query.currentLocation;
-      const categoryId = req.query.categoryId ? req.query.categoryId : 1;
+      const categoryId = req.query.recommendationId ? req.query.recommendationId : 1;
 
       console.log('2','currentLocation',currentLocation);
       console.log('2','categoryId',categoryId);
@@ -57,17 +57,21 @@ module.exports = {
       //6) category
       switch (categoryId) {
         case '1':
+         categories = ['музей','Достопримечательность','Клуб для детей и подростков','Курсы','мастер-классы'];
+          break;
+        case '2':
+         categories = ['концерт','Ночной клуб','Караоке-клуб','Концертный зал','Блядство разврат наркотики','клуб','разврат','Рок'];
+          // const types = ['Итальянская кухня', 'мясо', 'Паназиатская кухня', 'Морепродукты', 'Кавказская кухня', 'Европейская кухня', 'Выпить и закусить'];
+          break;
+        case '3':
          categories = ['Ресторан','кафе','бар','паб','столовая','Пиццерия','Кофейня','Кондитерская','кухня'];
           // const types = ['Итальянская кухня', 'мясо', 'Паназиатская кухня', 'Морепродукты', 'Кавказская кухня', 'Европейская кухня', 'Выпить и закусить'];
           break;
-        case '2':
-         categories = ['музей','Достопримечательность','Клуб для детей и подростков','Курсы','мастер-классы'];
-          break;
-        case '3':
+        case '4':
          categories = ['выставка','Современный','Художественный','салон','Выставочный центр','Антикварный магазин','Парк аттракционов','Развлекательный центр','Аттракцион'];
           break;
         default:
-          categories = ['концерт','Ночной клуб','Караоке-клуб','Концертный зал','Блядство разврат наркотики','клуб','разврат','Рок'];
+          categories = ['музей','кафе','выставка','клуб'];
       }
 
       const filteredHashes = locationHashes.filter(location => {
