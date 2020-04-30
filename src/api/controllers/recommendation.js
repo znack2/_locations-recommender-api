@@ -120,9 +120,9 @@ module.exports = {
         xName: 'longitude'
       }
 
-      // const result = sortByDistance(currentLocation, test, opts);
+      const result = sortByDistance(currentLocation, test, opts);
 
-      // console.log('9','result',result);
+      console.log('9','result',result);
 
       //format
       // resultfinal.forEach((result) => {
@@ -130,7 +130,7 @@ module.exports = {
       //   }
       // });
 
-      res.json(test);
+      res.json(result);
     } catch (error) {
       return next(error);
     }
