@@ -173,7 +173,7 @@ module.exports = {
       //   }
       // });
 
-      const final = test.map(result => {
+      const final = test.filter(result => {
         if(result != null){
           return result
         }else{
