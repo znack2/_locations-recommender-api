@@ -83,7 +83,7 @@ async function searchTags(tags = []) {
     },
     { ignore: [404] }
   );
-  console.log(body);
+  // console.log(body);
   return body.hits.hits.map(({_source}) => _source);
 }
 

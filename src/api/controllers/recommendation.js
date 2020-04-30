@@ -43,16 +43,15 @@ module.exports = {
       console.log('3','preferences',preferences);
 
       const tags = await searchTags(preferences);
-
-      console.log('3','tags',tags);
+      // console.log('3','tags',tags);
 
       //4) get ids from personalize
       const locationIds = await getRecomendations(tags[0].HashTag);
-      console.log('4','locationIds',locationIds); 
+      // console.log('4','locationIds',locationIds); 
 
       //5) get hashtag and type by location_id in location3
       const locationHashes = await searchLocation3(locationIds);//types
-      console.log('5','locationHashes',locationHashes);
+      // console.log('5','locationHashes',locationHashes);
 
 
       //6) category
@@ -83,7 +82,7 @@ module.exports = {
             return categories.includes(word)
           })
 
-          console.log('result_inside',result);
+          // console.log('result_inside',result);
 
           if(result.includes(true)){
             return location
@@ -91,16 +90,16 @@ module.exports = {
         }
       });
 
-      console.log('6','filteredHashes',filteredHashes);
+      // console.log('6','filteredHashes',filteredHashes);
       
       const getLocationData = async location => {
         //7) set locationData
         const locations = await searchLocations(location.name)//categories
-        console.log('7','locations',locations);
+        // console.log('7','locations',locations);
 
         //8) get posts from location
         const posts = await searchPosts(location.hash);
-        console.log('8','posts',posts);
+        // console.log('8','posts',posts);
 
         //9) get mainphoto from yandex
         async function callshift(name){
@@ -114,7 +113,7 @@ module.exports = {
         }
 
         const image = await callshift(location.name);
-        console.log('9','image',image);
+        // console.log('9','image',image);
 
         if(locations[0] != null){
             return Object.assign(locations[0], {
@@ -128,10 +127,11 @@ module.exports = {
 
       const locationsData = await setLocationData(filteredHashes);
 
-      console.log('10','locationsData',locationsData);
+      // console.log('10','locationsData',locationsData);
 
       //10) sort by distance  -----> REMOVE AFTER UPLOAD NEW DATA 
       const test = locationsData.map((item) => {
+
         if(item != null){
          return Object.assign(
           // id: ,
@@ -161,19 +161,15 @@ module.exports = {
         xName: 'longitude'
       }
 
-      // if(currentLocation != null && test != null){
-      //   const results = sortByDistance(currentLocation, test, opts);
-      // }else{
-      //   const results = test
-      // }
+      var results
+
+      if(currentLocation != null && test != null){
+        results = sortByDistance(currentLocation, test, opts);
+      }else{
+        results = test
+      }
 
       // console.log('11','results',results);
-
-      //format
-      // resultfinal.forEach((result) => {
-      //   const final[k] = {
-      //   }
-      // });
 
       const final = test.filter(result => {
         if(result != null){
@@ -182,6 +178,8 @@ module.exports = {
           console.log('UNDEFINED')
         }
       })
+
+      console.log('12','length',results.length);
 
       res.json(final);
     } catch (error) {
