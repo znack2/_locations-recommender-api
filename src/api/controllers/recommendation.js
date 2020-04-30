@@ -26,7 +26,7 @@ module.exports = {
 
       //2) get data
       const currentLocation = req.query.currentLocation;
-      const categoryId = req.query.categoryId;
+      const categoryId = req.query.categoryId ? req.query.categoryId : 1;
 
       console.log('2','currentLocation',currentLocation);
       console.log('2','categoryId',categoryId);
@@ -69,7 +69,7 @@ module.exports = {
           categories = ['концерт','Ночной клуб','Караоке-клуб','Концертный зал','Блядство разврат наркотики','клуб','разврат','Рок'];
       }
 
-      const filteredHashes = locationHash.filter(location => {
+      const filteredHashes = locationHashes.filter(location => {
         //get each element
         //split by word
         //check include word in array
