@@ -51,17 +51,56 @@ module.exports = {
       //5) get hashtag and type by location_id in location3
       const locationHashes = await searchLocation3(locationIds);//types
       console.log('5','locationHashes',locationHashes);
+
+
+      //6) category
+      switch (categoryId) {
+        case 1:
+        categories = ['Ресторан','кафе','бар','паб','столовая','Пиццерия','Кофейня','Кондитерская','кухня'];
+          // const types = ['Итальянская кухня', 'мясо', 'Паназиатская кухня', 'Морепродукты', 'Кавказская кухня', 'Европейская кухня', 'Выпить и закусить'];
+          break;
+        case 2:
+         categories = ['музей','Достопримечательность','Клуб для детей и подростков','Курсы','мастер-классы'];
+          break;
+        case 3:
+        categories = ['выставка','Современный','Художественный','салон','Выставочный центр','Антикварный магазин','Парк аттракционов','Развлекательный центр','Аттракцион'];
+          break;
+        default:
+          categories = ['концерт','Ночной клуб','Караоке-клуб','Концертный зал','Блядство разврат наркотики','клуб','разврат','Рок'];
+      }
+
+      const filteredHashes = locationHash.filter(location => {
+        //get each element
+        //split by word
+        //check include word in array
+        //if yes 
+        if(location.type != null){
+          const words = location.type.split(' ').filter(Boolean)
+
+          const result = words.map(word => {
+            return categories.includes(word)
+          })
+
+          console.log('result_inside',result);
+
+          if(result.includes(true)){
+            return location
+          }
+        }
+      });
+
+      console.log('6','filteredHashes',filteredHashes);
       
       const getLocationData = async location => {
-        //6) set locationData
+        //7) set locationData
         const locations = await searchLocations(location.name)//categories
         console.log('6','locations',locations);
 
-        //7) get posts from location
+        //8) get posts from location
         const posts = await searchPosts(location.hash);
         console.log('7','posts',posts);
 
-        //8) get mainphoto from yandex
+        //9) get mainphoto from yandex
         async function callshift(name){
           const result = await new Promise(resolve => 
             yandeximages.Search(
@@ -83,13 +122,13 @@ module.exports = {
         }
       }
 
-      const setLocationData = locationHashes => Promise.all(locationHashes.map(getLocationData));
+      const setLocationData = filteredHashes => Promise.all(filteredHashes.map(getLocationData));
 
-      const locationsData = await setLocationData(locationHashes);
+      const locationsData = await setLocationData(filteredHashes);
 
       console.log('8','locationsData',locationsData);
 
-      //9) sort by distance  -----> REMOVE AFTER UPLOAD NEW DATA 
+      //10) sort by distance  -----> REMOVE AFTER UPLOAD NEW DATA 
       const test = locationsData.map((item) => {
         if(item != null){
          return Object.assign(

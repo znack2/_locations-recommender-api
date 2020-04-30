@@ -47,6 +47,8 @@ async function searchLocation3(locationIds = []) {//categories
       index: "locations3",
       // index: "insta_data-*",
       body: {
+        from:0,
+        size:100,
         query: {
           bool: {
             should: conditions,
@@ -71,6 +73,8 @@ async function searchTags(tags = []) {
     {
       index: "tags",
         body: {
+          from:0,
+          size:100,
           query: {
             bool: {
               should: conditions
@@ -94,6 +98,8 @@ async function searchPosts(hash) {
     {
       index: "insta_data-*",
         body: {
+          from:0,
+          size:100,
           query: {
             bool: {
               should: {
@@ -135,6 +141,8 @@ async function searchLocations(name) //categories
     {
       index: "locations2",
       body: {
+        from:0,
+        size:100,
         query: {
           bool: {
             // should: conditions,
