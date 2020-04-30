@@ -137,8 +137,6 @@ async function searchLocations(name) //categories
     {
       index: "locations2",
       body: {
-        from:0,
-        size:100,
         query: {
           bool: {
             // should: conditions,

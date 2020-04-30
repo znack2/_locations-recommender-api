@@ -126,7 +126,7 @@ module.exports = {
 
       const locationsData = await setLocationData(filteredHashes);
 
-      console.log('8','locationsData',locationsData);
+      console.log('9','locationsData',locationsData);
 
       //10) sort by distance  -----> REMOVE AFTER UPLOAD NEW DATA 
       const test = locationsData.map((item) => {
@@ -159,13 +159,13 @@ module.exports = {
         xName: 'longitude'
       }
 
-      if(currentLocation != null){
+      if(currentLocation != null && test != null){
         const results = sortByDistance(currentLocation, test, opts);
       }else{
         const results = test
       }
 
-      console.log('9','results',results);
+      console.log('10','results',results);
 
       //format
       // resultfinal.forEach((result) => {
