@@ -159,9 +159,9 @@ module.exports = {
         xName: 'longitude'
       }
 
-      const result = sortByDistance(currentLocation, test, opts);
+      const results = sortByDistance(currentLocation, test, opts);
 
-      console.log('9','result',result);
+      console.log('9','results',results);
 
       //format
       // resultfinal.forEach((result) => {
@@ -169,7 +169,15 @@ module.exports = {
       //   }
       // });
 
-      res.json(result);
+      const final = results.map(result => {
+        if(result != null){
+          return result
+        }else{
+          console.log('UNDEFINED')
+        }
+      })
+
+      res.json(final);
     } catch (error) {
       return next(error);
     }
