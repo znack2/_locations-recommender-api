@@ -94,11 +94,11 @@ module.exports = {
       const getLocationData = async location => {
         //7) set locationData
         const locations = await searchLocations(location.name)//categories
-        console.log('6','locations',locations);
+        console.log('7','locations',locations);
 
         //8) get posts from location
         const posts = await searchPosts(location.hash);
-        console.log('7','posts',posts);
+        console.log('8','posts',posts);
 
         //9) get mainphoto from yandex
         async function callshift(name){
@@ -112,7 +112,7 @@ module.exports = {
         }
 
         const image = await callshift(location.name);
-        console.log('8','image',image);
+        console.log('9','image',image);
 
         if(locations[0] != null){
             return Object.assign(locations[0], {
@@ -126,7 +126,7 @@ module.exports = {
 
       const locationsData = await setLocationData(filteredHashes);
 
-      console.log('9','locationsData',locationsData);
+      console.log('10','locationsData',locationsData);
 
       //10) sort by distance  -----> REMOVE AFTER UPLOAD NEW DATA 
       const test = locationsData.map((item) => {
@@ -159,13 +159,13 @@ module.exports = {
         xName: 'longitude'
       }
 
-      if(currentLocation != null && test != null){
-        const results = sortByDistance(currentLocation, test, opts);
-      }else{
-        const results = test
-      }
+      // if(currentLocation != null && test != null){
+      //   const results = sortByDistance(currentLocation, test, opts);
+      // }else{
+      //   const results = test
+      // }
 
-      console.log('10','results',results);
+      // console.log('11','results',results);
 
       //format
       // resultfinal.forEach((result) => {
@@ -173,7 +173,7 @@ module.exports = {
       //   }
       // });
 
-      const final = results.map(result => {
+      const final = test.map(result => {
         if(result != null){
           return result
         }else{
