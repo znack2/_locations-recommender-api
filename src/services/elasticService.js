@@ -73,8 +73,6 @@ async function searchTags(tags = []) {
     {
       index: "tags",
         body: {
-          from:0,
-          size:100,
           query: {
             bool: {
               should: conditions
@@ -98,8 +96,6 @@ async function searchPosts(hash) {
     {
       index: "insta_data-*",
         body: {
-          from:0,
-          size:100,
           query: {
             bool: {
               should: {
