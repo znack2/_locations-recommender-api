@@ -159,7 +159,11 @@ module.exports = {
         xName: 'longitude'
       }
 
-      const results = sortByDistance(currentLocation, test, opts);
+      if(currentLocation != null){
+        const results = sortByDistance(currentLocation, test, opts);
+      }else{
+        const results = test
+      }
 
       console.log('9','results',results);
 
