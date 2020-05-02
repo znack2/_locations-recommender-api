@@ -15,7 +15,7 @@ router.post('/logout', [authChecker, controllers.auth.logout]);
 router.get('/user', [authChecker, controllers.user.getUser]);
 router.get('/user/preferences', [authChecker, controllers.user.getUserPreferences]);
 router.post('/user/preferences', [authChecker, controllers.user.addUserPreference]);
-router.delete('/user/preferences', [authChecker, controllers.user.removeUserPreference]);
+router.delete('/user/preferences', [authChecker, controllers.user.removeUserPreferences]);
 
 router.get('/recommendation', [authChecker, controllers.recommendation.getRecommendation]);
 router.post('/recommendation/skip', [authChecker, controllers.recommendation.skipRecommendation]);

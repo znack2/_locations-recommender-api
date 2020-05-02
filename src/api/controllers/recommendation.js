@@ -4,6 +4,8 @@ const sortByDistance = require('sort-by-distance');
 const yandeximages = require("yandex-images");
 
 const { getRecomendations } = require('../../services/personalizeService');
+// const { getUserPreferences } = require('../../controllers/user');
+
 
 const { 
   // search,

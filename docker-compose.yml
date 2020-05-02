@@ -1,6 +1,28 @@
 version: "3"
 
 services:
+
+  # nginx:
+  #   image: nginx:1.15-alpine
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./docker/nginx:/etc/nginx/conf.d
+  #     - ./docker/certbot/conf:/etc/letsencrypt
+  #     - ./docker/certbot/www:/var/www/certbot
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  
+  # certbot:
+  #   image: certbot/certbot
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./docker/certbot/conf:/etc/letsencrypt
+  #     - ./docker/certbot/www:/var/www/certbot
+  #   entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+
   locations-recommender-api:
     image: node:12
     ports:
@@ -14,6 +36,7 @@ services:
     command: yarn start:debug
     depends_on:
       - locations-recommender-db
+
 
   locations-recommender-db:
     image: postgres

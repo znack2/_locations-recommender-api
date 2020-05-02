@@ -45,10 +45,44 @@ module.exports = {
       return next(error);
     }
   },
+  removeUserPreferences: async (req, res, next) => {
+    try {
+      const { userId } = req.session;
+      const { preferences } = req.body;
+
+      if (!preferences) {
+        throw new ApiError('INVALID_PREFERENCE');
+      }
+
+      const removePreference = async preference => {
+        
+        if (!preference || typeof preference !== 'string') {
+          throw new ApiError('INVALID_PREFERENCE');
+        }
+
+        if (!(await models.userPreferences.exists({ userId, preference }))) {
+          throw new ApiError('PREFERENCE_DOESNT_EXIST');
+        }
+
+        const [userPreference] = await models.userPreferences.delete({ userId, preference }, '*');
+
+        return userPreference;
+      }
+
+      const removePreferences = preferences => Promise.all(preferences.map(removePreference));
+
+      const result = await removePreferences(preferences);
+
+      res.json(result);
+    } catch (error) {
+      return next(error);
+    }
+  },   
   removeUserPreference: async (req, res, next) => {
     try {
       const { userId } = req.session;
       const { preference } = req.body;
+
 
       if (!preference || typeof preference !== 'string') {
         throw new ApiError('INVALID_PREFERENCE');
