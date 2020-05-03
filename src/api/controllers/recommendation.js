@@ -79,7 +79,7 @@ module.exports = {
 
         // const finallocationIds = compareArr(locationIds);
 
-        const finallocationIds = await getRecomendations(tags[i].HashTag);
+        const finallocationIds = await getRecomendations(tags[0].HashTag);
       }
 
 
