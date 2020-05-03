@@ -50,13 +50,13 @@ module.exports = {
       // } 
 
       const tags = await searchTags(preferences);
-      // console.log('3','tags',tags);
+      console.log('3','tags',tags);
 
       var finallocationIds;
 
-      if(!tags){
+      if(!tags || tags == null){
         throw new ApiError('TAG_NOT_FOUND');
-        finallocationIds = await getRecomendations(['']);
+        finallocationIds = await getRecomendations(['кафе']);
         // console.log('4','locationIds',locationIds); 
       } else {
         // for (var i = tags.length - 1; i >= 0; i--) {
