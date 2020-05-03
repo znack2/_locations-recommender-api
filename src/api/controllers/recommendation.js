@@ -52,9 +52,11 @@ module.exports = {
       const tags = await searchTags(preferences);
       // console.log('3','tags',tags);
 
+      var finallocationIds;
+
       if(!tags){
         throw new ApiError('TAG_NOT_FOUND');
-        const finallocationIds = await getRecomendations(['']);
+        finallocationIds = await getRecomendations(['']);
         // console.log('4','locationIds',locationIds); 
       } else {
         // for (var i = tags.length - 1; i >= 0; i--) {
@@ -79,7 +81,7 @@ module.exports = {
 
         // const finallocationIds = compareArr(locationIds);
 
-        const finallocationIds = await getRecomendations(tags[0].HashTag);
+        finallocationIds = await getRecomendations(tags[0].HashTag);
       }
 
 
