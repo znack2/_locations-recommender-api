@@ -24,12 +24,13 @@ module.exports = {
       // const userId = 1;
       console.log('1','userId',userId);
 
-      // currentLocation: {"lat":55.7501898,"lan":37.795363099999996}
-
       var categories;
 
       //2) get data
-      const currentLocation = req.query.currentLocation;
+      const currentLocation = req.query.currentLocation 
+        ? req.query.recommendationId 
+        : {"lat":55.7501898,"lan":37.795363099999996};
+
       const categoryId = req.query.recommendationId ? req.query.recommendationId : 1;
 
       console.log('2','currentLocation',currentLocation);
@@ -44,17 +45,55 @@ module.exports = {
 
       console.log('3','preferences',preferences);
 
+      // if(!preferences){
+      //   preferences = [''];
+      // } 
+
       const tags = await searchTags(preferences);
       // console.log('3','tags',tags);
 
-      //4) get ids from personalize
-      const locationIds = await getRecomendations(tags[0].HashTag);
-      // console.log('4','locationIds',locationIds); 
+      if(!tags){
+        throw new ApiError('TAG_NOT_FOUND');
+        const finallocationIds = await getRecomendations(['']);
+        // console.log('4','locationIds',locationIds); 
+      } else {
+        // for (var i = tags.length - 1; i >= 0; i--) {
+        //   //4) get ids from personalize
+        //   const locationIds[] = await getRecomendations(tags[i].HashTag);
+        //   // console.log('4','locationIds',locationIds); 
+        // }
+
+        // //5) find similar locationIDs
+        // function compareArr(arrList){
+        //   var S = '@' + arrList.join('@');
+        //   var re = /(@[^@]+)(@.*)?(\1)(@|$)/gi
+        //   var afterReplace=''; var i=0;
+        //   while(afterReplace!=S && i<100){
+        //       afterReplace=S;
+        //       S = S.replace( re, "$1$2$4" )
+        //       i++
+        //   }
+
+        //   return S.substr(1,S.length-1).replace(/@/g,'<br>')
+        // }
+
+        // const finallocationIds = compareArr(locationIds);
+
+        const finallocationIds = await getRecomendations(tags[i].HashTag);
+      }
+
+
+      if(!finallocationIds){
+        throw new ApiError('PERSONALIZE_EMPTY');
+      }
 
       //5) get hashtag and type by location_id in location3
-      const locationHashes = await searchLocation3(locationIds);//types
+      const locationHashes = await searchLocation3(finallocationIds);//types
       // console.log('5','locationHashes',locationHashes);
 
+      if(!locationHashes){
+        throw new ApiError('LOCATIONS3_EMPTY');
+      }
 
       //6) category
       switch (categoryId) {
@@ -107,6 +146,10 @@ module.exports = {
         const posts = await searchPosts(location.hash);
         // console.log('8','posts',posts);
 
+        if(!posts){
+          throw new ApiError('POSTS_EMPTY');
+        }
+
         //9) get mainphoto from yandex
         async function callshift(name){
           const result = await new Promise(resolve => 
@@ -132,6 +175,10 @@ module.exports = {
       const setLocationData = filteredHashes => Promise.all(filteredHashes.map(getLocationData));
 
       const locationsData = await setLocationData(filteredHashes);
+
+      if(!locationsData){
+        throw new ApiError('LOCATIONS_EMPTY');
+      }
 
       // console.log('10','locationsData',locationsData);
 
