@@ -12,8 +12,13 @@ const params = {
 };
 
 const getRecomendations = async (userId) => { 
-    const result = await pers.getRecommendations({...params, userId}).promise();
-    return result.itemList.map(({ itemId }) => itemId);
+	 try {
+      const result = await pers.getRecommendations({...params, userId}).promise();
+      return result.itemList.map(({ itemId }) => itemId);
+    } catch (error) {
+    	return 'PersonalizeError';
+      // throw new ServiceError('INVALID_PREFERENCE');
+    }
 }
 
 module.exports = { 

@@ -5,7 +5,42 @@ module.exports = {
       code: '40001',
       title: 'Authorization code required'
     }
-  },
+  },  
+  TAG_NOT_FOUND: {
+    statusCode: 400,
+    data: {
+      code: '40001',
+      title: 'Tags not found'
+    }
+  },  
+  PERSONALIZE_EMPTY: {
+    statusCode: 400,
+    data: {
+      code: '40001',
+      title: 'PERSONALIZE_EMPTY'
+    }
+  },  
+  LOCATIONS3_EMPTY: {
+    statusCode: 400,
+    data: {
+      code: '40001',
+      title: 'LOCATIONS3_EMPTY'
+    }
+  },  
+  POSTS_EMPTY: {
+    statusCode: 400,
+    data: {
+      code: '40001',
+      title: 'POSTS_EMPTY'
+    }
+  },  
+  LOCATIONS_EMPTY: {
+    statusCode: 400,
+    data: {
+      code: '40001',
+      title: 'LOCATIONS_EMPTY'
+    }
+  }, 
   INVALID_AUTHORIZATION_CODE: {
     statusCode: 400,
     data: {

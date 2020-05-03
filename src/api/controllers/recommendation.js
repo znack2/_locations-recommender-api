@@ -41,56 +41,56 @@ module.exports = {
         // .then(preferences => await searchTag(preferences));
         .then(preferences => preferences.map(({ preference }) => preference));
 
-      // const preference = 'клуб';
-
       console.log('3','preferences',preferences);
-
-      // if(!preferences){
-      //   preferences = [''];
-      // } 
 
       const tags = await searchTags(preferences);
       console.log('3','tags',tags);
 
-      var finallocationIds;
 
-      if(!tags || tags == null){
-        throw new ApiError('TAG_NOT_FOUND');
-        finallocationIds = await getRecomendations(['кафе']);
-        // console.log('4','locationIds',locationIds); 
+
+
+      // var finallocationIds;
+
+      // if(!tags || tags === undefined || tags.length == 0){
+      //   // throw new ApiError('TAG_NOT_FOUND');
+      //   finallocationIds = await getRecomendations(['кафе']);
+      //   // console.log('4','locationIds',locationIds); 
+      // } else {
+
+
+      //   finallocationIds = await getRecomendations(tags[0].HashTag);
+      // }
+
+      var uniqueLocationIds;
+
+      if(!tags || tags === undefined || tags.length == 0){
+        // throw new ApiError('TAG_NOT_FOUND');
+        uniqueLocationIds = await getRecomendations('кафе');
+        console.log('4','uniqueLocationIds',uniqueLocationIds); 
       } else {
-        // for (var i = tags.length - 1; i >= 0; i--) {
-        //   //4) get ids from personalize
-        //   const locationIds[] = await getRecomendations(tags[i].HashTag);
-        //   // console.log('4','locationIds',locationIds); 
-        // }
+        var finallocationIds = [];
 
-        // //5) find similar locationIDs
-        // function compareArr(arrList){
-        //   var S = '@' + arrList.join('@');
-        //   var re = /(@[^@]+)(@.*)?(\1)(@|$)/gi
-        //   var afterReplace=''; var i=0;
-        //   while(afterReplace!=S && i<100){
-        //       afterReplace=S;
-        //       S = S.replace( re, "$1$2$4" )
-        //       i++
-        //   }
-
-        //   return S.substr(1,S.length-1).replace(/@/g,'<br>')
-        // }
-
-        // const finallocationIds = compareArr(locationIds);
-
-        finallocationIds = await getRecomendations(tags[0].HashTag);
+        for (var i = tags.length - 1; i >= 0; i--) {
+          //4) get ids from personalize
+          var locationIds = await getRecomendations(tags[i].HashTag);
+          // console.log('4','res',locationIds); 
+          finallocationIds.push(locationIds);
+          // if (data.indexOf(element) === index) {
+            // finallocationIds.push(locationIds)
+          // }
+        }
+        uniqueLocationIds = [...new Set(finallocationIds.flat())];
       }
 
+      console.log('5','uniqueLocationIds',uniqueLocationIds); 
 
-      if(!finallocationIds){
+
+      if(!uniqueLocationIds){
         throw new ApiError('PERSONALIZE_EMPTY');
       }
 
       //5) get hashtag and type by location_id in location3
-      const locationHashes = await searchLocation3(finallocationIds);//types
+      const locationHashes = await searchLocation3(uniqueLocationIds);//types
       // console.log('5','locationHashes',locationHashes);
 
       if(!locationHashes){

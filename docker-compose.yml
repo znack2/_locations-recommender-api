@@ -31,6 +31,9 @@ services:
     volumes:
       - yarn:/root/.cache/yarn
       - .:/usr/src/app
+    environment:
+      - BASE_URL=https://secure.stayandsmile.com/v1
+      # - BASE_URL=http://localhost:3000/v1
     working_dir: /usr/src/app
     entrypoint: ./entrypoint.sh
     command: yarn start:debug

@@ -42,7 +42,7 @@ module.exports = {
       // }
 
       var user = {
-        id: Date.now(),//Math.floor(Math.random() * 100),
+        id: Math.floor(Math.random() * 100),//Date.now(),
         username: '_' + Math.random().toString(36).substr(2, 9)
       };
 
