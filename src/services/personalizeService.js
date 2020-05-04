@@ -8,7 +8,7 @@ const pers = new aws.PersonalizeRuntime({
 
 const params = {
     campaignArn: 'arn:aws:personalize:us-east-2:504754404119:campaign/igrek_Msk',
-    numResults: 100,
+    numResults: 10,
 };
 
 const getRecomendations = async (userId) => { 

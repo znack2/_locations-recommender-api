@@ -1,7 +1,11 @@
 const ApiError = require('../errors/ApiError');
 const models = require('../../models');
 const sortByDistance = require('sort-by-distance');
-const yandeximages = require("yandex-images");
+// const yandeximages = require("yandex-images");
+const fetch = require('node-fetch');
+// var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+var {image_search} = require("duckduckgo-images-api");
+// const fs = require('fs');
 
 const { getRecomendations } = require('../../services/personalizeService');
 // const { getUserPreferences } = require('../../controllers/user');
@@ -44,29 +48,15 @@ module.exports = {
       console.log('3','preferences',preferences);
 
       const tags = await searchTags(preferences);
-      console.log('3','tags',tags);
-
-
-
-
-      // var finallocationIds;
-
-      // if(!tags || tags === undefined || tags.length == 0){
-      //   // throw new ApiError('TAG_NOT_FOUND');
-      //   finallocationIds = await getRecomendations(['кафе']);
-      //   // console.log('4','locationIds',locationIds); 
-      // } else {
-
-
-      //   finallocationIds = await getRecomendations(tags[0].HashTag);
-      // }
+      // console.log('3','tags',tags);
+      console.log('3','tags.length',tags.length);
 
       var uniqueLocationIds;
 
       if(!tags || tags === undefined || tags.length == 0){
         // throw new ApiError('TAG_NOT_FOUND');
         uniqueLocationIds = await getRecomendations('кафе');
-        console.log('4','uniqueLocationIds',uniqueLocationIds); 
+        // console.log('4','uniqueLocationIds',uniqueLocationIds); 
       } else {
         var finallocationIds = [];
 
@@ -82,8 +72,8 @@ module.exports = {
         uniqueLocationIds = [...new Set(finallocationIds.flat())];
       }
 
-      console.log('5','uniqueLocationIds',uniqueLocationIds); 
-
+      // console.log('5','uniqueLocationIds',uniqueLocationIds); 
+      console.log('5','uniqueLocationIds.length',uniqueLocationIds.length);
 
       if(!uniqueLocationIds){
         throw new ApiError('PERSONALIZE_EMPTY');
@@ -138,6 +128,7 @@ module.exports = {
       });
 
       // console.log('6','filteredHashes',filteredHashes);
+      console.log('6','filteredHashes.length',filteredHashes.length);
       
       const getLocationData = async location => {
         //7) set locationData
@@ -153,23 +144,78 @@ module.exports = {
         }
 
         //9) get mainphoto from yandex
-        async function callshift(name){
-          const result = await new Promise(resolve => 
-            yandeximages.Search(
-              name, 
-              false, 
-              url => resolve(url)
-            ));
-          return result
-        }
+        async function callshift (website, callback){
+          if(website || website !== undefined){
+            // try {
+              const query = website.replace(/(^\w+:|^)\/\//, '').slice(0,-1);// + '&iax=images&ia=images';
 
-        const image = await callshift(location.name);
-        // console.log('9','image',image);
+              console.log('query',query);
+
+              // result = await new Promise(resolve => 
+              //     setTimeout(function() 
+              //     {
+              //       var query = name + '&iax=images&ia=images';
+              //       // var query = location.website.replace(/(^\w+:|^)\/\//, '') + '&iax=images&ia=images';
+
+              //       image_search({ query: query, moderate: true }, 1, 1).then(
+              //         res => {
+              //             if (res.ok) {
+              //                 console.log('duckduckGo ok.');
+              //                 resolve(res)
+              //             } else {
+              //                 console.log('duckduckGo error');
+              //             }
+              //         }
+              //       );
+              //     }, 100)
+              // );
+
+              image_search({ query: query, moderate: false }, 2, 1).then(
+                  res => {
+                      console.log('res',res[0]);
+                      if (res || res !== undefined) {
+                          console.log('duckduckGo ok.');
+                          callback(res[0].image)
+                      } else {
+                          console.log('duckduckGo error');
+                      }
+                  }
+                );
+
+              // return result[0].image
+          //   } catch (error) {
+          //     console.log(error);
+          //   }
+          }
+        };
+
+        //10) filter photos if not exist
+        const checkResource = async post => {
+          fetch(post.display_url, { method: 'HEAD' })
+            .then(res => {
+                if (res.ok) {
+                    console.log('Image exists.');
+                    return post.display_url
+                } else {
+                    console.log('Image does not exist.');
+                }
+            })//.catch(err => console.log('Error:', err));
+
+          return post.display_url
+       };
+
+        const filterPhotos = posts => Promise.all(posts.map(checkResource));
+
+        // const getPhoto = website => Promise.all(callshift(website));
+        // const getPhoto = locations => Promise.all(locations.map(callshift));
 
         if(locations[0] != null){
             return Object.assign(locations[0], {
-              photo:  posts.map(post => post.display_url),
-              mainPhoto: image
+              photo: await filterPhotos(posts),
+              mainphoto: await new Promise(resolve => callshift(locations[0].website, res => resolve(res)))
+              // mainPhoto: await getPhoto(locations[0].website)
+              //get website from location
+              //
             })
         }
       }
@@ -183,6 +229,7 @@ module.exports = {
       }
 
       // console.log('10','locationsData',locationsData);
+      console.log('10','locationsData.length',locationsData.length);
 
       //10) sort by distance  -----> REMOVE AFTER UPLOAD NEW DATA 
       const test = locationsData.map((item) => {
@@ -194,6 +241,9 @@ module.exports = {
           {longitude: item.location.lon}, 
           {googleLink: 'https://www.google.com/maps/place/'+ item.address.trim() +'/@'+ item.location.lat + ',' + item.location.lon},
           {description: 'text'}, //-----> SET HERE TEXT
+          // {item.photos: item.photos.filter(photo => {
+          //   return 
+          // })},
           {positiveReviews: 1996},
           {negativeReviews: 174},
           {averageBillUSD: 30},
@@ -219,16 +269,16 @@ module.exports = {
       var results
 
       if(currentLocation != null && test != null){
-        results = sortByDistance(currentLocation, test, opts);
+        results = sortByDistance(currentLocation, test, opts)
       }else{
         results = test
       }
 
       // console.log('11','results',results);
 
-      const final = test.filter(result => {
-        if(result != null){
-          return result
+      const final = test.filter(location => {
+        if(location != null){
+          return location
         }else{
           console.log('UNDEFINED')
         }
@@ -236,7 +286,7 @@ module.exports = {
 
       console.log('12','length',results.length);
 
-      res.json(final);
+      res.json(final.slice(0,5));
     } catch (error) {
       return next(error);
     }
