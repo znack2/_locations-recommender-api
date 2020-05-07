@@ -10,7 +10,7 @@ module.exports = {
   runServer: () => {
     const app = express();
 
-    app.use(timeout('10s')); 
+    // app.use(timeout('50s')); 
 
     app.use((req, res, next) => {
       res.set('Access-Control-Allow-Origin', '*');
@@ -43,11 +43,11 @@ module.exports = {
 
     app.use(errorHandler);
 
-    app.use(haltOnTimedout);
+    // app.use(haltOnTimedout);
 
-    function haltOnTimedout(req, res, next){
-      if (!req.timedout) next();
-    }
+    // function haltOnTimedout(req, res, next){
+    //   if (!req.timedout) next();
+    // }
 
     return new Promise(resolve => {
       const server = app.listen(config.get('app.port'), () => {

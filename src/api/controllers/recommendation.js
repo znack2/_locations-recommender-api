@@ -5,13 +5,16 @@ const sortByDistance = require('sort-by-distance');
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 const axios = require("axios");
+const fs = require('fs');
 // var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var {image_search} = require("duckduckgo-images-api");
 // const fs = require('fs');
+// var search = require('image-search');
+// var rp = require('request-promise');
+
 
 const { getRecomendations } = require('../../services/personalizeService');
 // const { getUserPreferences } = require('../../controllers/user');
-
 
 const { 
   // search,
@@ -25,76 +28,46 @@ const {
 module.exports = {
   getRecommendation: async (req, res, next) => {
     try {
-      //1) user
       const { userId } = req.session;
-      // const userId = 1;
-      // console.log('console_check_1','userId',userId);
 
-      //2) get data
       const currentLocation = req.query.currentLocation 
         ? req.query.recommendationId 
         : {"lat":54.7501898,"lan":36.795363099999996};
-        // : {"lat":55.7501898,"lan":37.795363099999996};
 
       const categoryId = req.query.recommendationId ? req.query.recommendationId : 5;
 
-      // console.log('console_check_2','currentLocation',currentLocation);
-      // console.log('console_check_2','categoryId',categoryId);
-
-      // 3) get preferences
       const preferences = await models.userPreferences.find({ userId }, ['preference'])
-        // .then(preferences => await searchTag(preferences));
         .then(preferences => preferences.map(({ preference }) => preference));
 
-      // console.log('console_check_3','preferences',preferences);
-
       const tags = await searchTags(preferences);
-      // console.log('3','tags',tags);
-      // console.log('console_check_3','tags.length',tags.length);
 
       var uniqueLocationIds;
 
       if(!tags || tags === undefined || tags.length == 0)
-      {
-        uniqueLocationIds = await getRecomendations('кафе');
-        // console.log('console_check_4','uniqueLocationIds',uniqueLocationIds); 
-      } 
+        {
+          uniqueLocationIds = await getRecomendations('кафе');
+        } 
       else 
-      {
-        var finallocationIds = [];
+        {
+          var finallocationIds = [];
 
-        for (var i = tags.length - 1; i >= 0; i--) {
-          //4) get ids from personalize
-          var locationIds = await getRecomendations(tags[i].HashTag);
-          // console.log('console_check_4','locationIds',locationIds); 
-          finallocationIds.push(locationIds);
+          for (var i = tags.length - 1; i >= 0; i--) {
+            var locationIds = await getRecomendations(tags[i].HashTag);
+            finallocationIds.push(locationIds);
+          }
+          uniqueLocationIds = [...new Set(finallocationIds.flat())];
         }
-        uniqueLocationIds = [...new Set(finallocationIds.flat())];
-      }
-
-      // console.log('5','uniqueLocationIds',uniqueLocationIds); 
-      // console.log('console_check_5','uniqueLocationIds.length',uniqueLocationIds.length);
 
       if(!uniqueLocationIds){
         throw new ApiError('PERSONALIZE_EMPTY');
       }
 
-      //5) get hashtag and type by location_id in location3
-      const locationHashes = await searchLocation3(uniqueLocationIds);//types
-      // console.log('5','locationHashes',locationHashes);
-      // console.log('console_check_6','locationHashes',locationHashes.length);
-        // {
-        //   id: '100010000410096',
-        //   name: 'Л.Кнопа',
-        //   hash: ' особняккнопа',
-        //   type: ' Музей-усадьба'
-        // },
+      const locationHashes = await searchLocation3(uniqueLocationIds);
 
       if(!locationHashes){
         throw new ApiError('LOCATIONS3_EMPTY');
       }
 
-      //6) category
       var categories;
 
       switch (categoryId) {
@@ -103,11 +76,9 @@ module.exports = {
           break;
         case '2':
          categories = ['концерт','Ночной клуб','Караоке-клуб','Концертный зал','Блядство разврат наркотики','клуб','разврат','Рок'];
-          // const types = ['Итальянская кухня', 'мясо', 'Паназиатская кухня', 'Морепродукты', 'Кавказская кухня', 'Европейская кухня', 'Выпить и закусить'];
           break;
         case '3':
          categories = ['Ресторан','кафе','бар','паб','столовая','Пиццерия','Кофейня','Кондитерская','кухня'];
-          // const types = ['Итальянская кухня', 'мясо', 'Паназиатская кухня', 'Морепродукты', 'Кавказская кухня', 'Европейская кухня', 'Выпить и закусить'];
           break;
         case '4':
          categories = ['выставка','Современный','Художественный','салон','Выставочный центр','Антикварный магазин','Парк аттракционов','Развлекательный центр','Аттракцион'];
@@ -118,25 +89,16 @@ module.exports = {
 
       const filteredHashes = locationHashes.filter(location => {
         if(location.type != null){
-          //split by word
           var words = location.type.split(' ').filter(Boolean)
-           //check include word in array
           var result = words.map(word => {
             return categories.includes(word)
           })
-
-          // console.log('result_inside',result);
 
           if(result.includes(true)){
             return location
           }
         }
       });
-
-      // console.log('console_check_7','filteredHashes.length',filteredHashes.length);
-      // filteredHashes.map(location => console.log('console_check_7','filteredHashes.each',location.name));
-      // console.log('console_check_7','filteredHashes.length',filteredHashes);
-      
 
       function timeout(ms, promise) {
         return new Promise(function(resolve, reject) {
@@ -148,195 +110,126 @@ module.exports = {
         })
       }
 
-
-
       const getLocationData = async location => {
-        //7) set locationData
-
-        // console.log('console_check_8','location.name -->',location.name);
 
         var locationData = await searchLocations(location.name)//categories
-        // console.log('console_check_8','locationData.length',locationData.length);
-
-        // console.log('console_check_8','locationData.name',locationData[0].name);
-        // console.log('console_check_8','locationData',locationData);
-          // {
-          //   name: 'Китайский летчик Джао Да',
-          //   address: 'Россия, Москва, Лубянский проезд, 25, стр. 1',
-          //   website: 'http://www.jao-da.ru/',
-          //   phone: '+7 (495) 624-56-11 +7 (495) 623-28-96',
-          //   type: 'Кафе Ресторан Ночной клуб',
-          //   workhours: 'пн-пт 11:00–6:00, сб,вс 12:00–6:00',
-          //   lat: '55.7549148',
-          //   lon: '37.634553',
-          //   maintag: 'КитайскийлетчикДжаоДа\n'
-          // },
 
         if(locationData.length == 0){
-          // console.log('locationData','EMPTY');
           return;
         }
-        //8) get posts from location
         var posts = await searchPosts(location.hash);
-        // console.log('console_check_9','posts.length',posts.length);
-        // console.log('console_check_9','posts',posts);
-
-        // {
-        //   display_url: 'https://scontent-frt3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/66346490_2930842733652374_2743469691561075586_n.jpg?_nc_ht=scontent-frt3-1.cdninstagram.com&_nc_cat=102&_nc_ohc=USpS3f5PBuoAX_sGxW1&oh=9cc56fb84b1327a7a3e79c52443b972c&oe=5EC8EB62',
-        //   insta_description: 'Ph: @tetyaksusha \n' +
-        //     '#девичникмосква #девичникэтодух #девичникподруги #девичникамногонебывает #москва #взаимныеподписки #сладкиймузей🍭 #свадебныйдевичник  #сладкиймузеймосква #sweetmuseum #взаимныелайки #sweet #happy #msk мск #sexy #кола #cocacola #rose #pink #happy #goodday #розовый',
-        //   thumbnail_src: 'https://scontent-frt3-1.cdninstagram.com/v/t51.2885-15/sh0.08/e35/c0.180.1440.1440a/s640x640/66346490_2930842733652374_2743469691561075586_n.jpg?_nc_ht=scontent-frt3-1.cdninstagram.com&_nc_cat=102&_nc_ohc=USpS3f5PBuoAX_sGxW1&oh=9e12747524a69c1515ccd3b42e51e4d3&oe=5ECBA6C6',
-        // }
-
+       
         if(!posts){
           throw new ApiError('POSTS_EMPTY');
         }
 
         if(locationData[0] != null){
 
-            //10) get mainphoto from yandex
-            async function getMainPhoto (location, callback){
+            // async function getMainPhoto (location, callback){
 
-              if(location.website && location.website !== undefined){
+            //   if(location.website && location.website !== undefined){
 
-                // console.log('location.website',location.website);
-                // try {
-                  var query = location.website.replace(/(^\w+:|^)\/\//, '');//.slice(0,-1);// + '&iax=images&ia=images';
+            //       var query = location.website.replace(/(^\w+:|^)\/\//, '');//.slice(0,-1);// + '&iax=images&ia=images';
+            //       image_search({ query: query, moderate: false }, 2, 1)
+            //         .then(function(result) {
+            //         if (result && result !== undefined && result[0] !== undefined) {
+            //             // console.log('duckduckGo ok.');
+            //             callback({
+            //               photo:result[0].image, 
+            //               url:result[0].url
+            //             })
+            //         } else {
+            //             callback({
+            //               photo: 'https://img.freepik.com/free-vector/colorful-smooth-gradient-background_97886-980.jpg?size=626&ext=jpg', 
+            //               url: null
+            //             })
+            //         }
+            //       }).catch(function(error) { })
+            //   }
+            // };
 
-                  // console.log('console_check_query',query);
+            // async function checkResource(post){//const functionName = async post => 
+            //   var photoArray = [];
 
-                // timeout(50000, )
-                  image_search({ query: query, moderate: false }, 2, 1).then(function(result) {
-                    if (result && result !== undefined && result[0] !== undefined) {
-                        // console.log('duckduckGo ok.');
-                        callback({
-                          photo:result[0].image, 
-                          url:result[0].url
-                        })
-                    } else {
-                         // console.log('duckduckGo error');
-                        callback({
-                          photo: 'https://img.freepik.com/free-vector/colorful-smooth-gradient-background_97886-980.jpg?size=626&ext=jpg', 
-                          url: null
-                        })
-                    }
-                  }).catch(function(error) {
-                    // console.log('duckduckGo error',error);
-                  })
+            //   if(post && post != undefined){
 
-                    // image_search({ query: query, moderate: false }, 2, 1).then(
-                    //   res => {
-                    //       console.log('res',res[0]);
-                    //       if (res || res !== undefined) {
-                    //           console.log('duckduckGo ok.');
-                    //           callback({
-                    //             photo:res[0].image, 
-                    //             url:res[0].url
-                    //           })
-                    //       } else {
-                    //           console.log('duckduckGo error');
-                    //       }
-                    //   }
-                    // ).catch(function(error) {
-                    //   console.log('duckduckGo error',error);
-                    // });
+            //     var photo = fetch(post.display_url, { method: 'HEAD' }).then(function(result) {
+            //         if (result.ok) {
+            //             var link = post.display_url.substring(0, post.display_url.indexOf('?'));
+            //             if(photoArray.includes(link)){
+            //             } else {
+            //               photoArray.push(link);
+            //               return post.display_url
+            //             }
+            //         } else {
+            //         }
+            //       }).catch(function(error) {
+            //       })
+            //     return photo
+            //   }
+            // };
 
-                  // return result[0].image
-              //   } catch (error) {
-              //     console.log(error);
-              //   }
-              }
-            };
+            // async function getDescription (link, callback){
+            //   if(!link || link == null){
+            //     callback('some text')
+            //   } else {
+            //       var { data } = await axios.get(link)
 
-            //11) filter photos if not exist or repeat
-            async function checkResource(post){//const functionName = async post => 
-              var photoArray = [];
+            //       var $ = cheerio.load(data,{
+            //          ignoreWhitespace: true
+            //        });
 
-                  var photo = timeout(10000, fetch(post.display_url, { method: 'HEAD' })).then(function(result) {
-                    if (result.ok) {
-                        var link = post.display_url.substring(0, post.display_url.indexOf('?'));
-                        if(photoArray.includes(link)){
-                          // console.log('Image repetition.');  
-                        } else {
-                          // console.log('Image exists.');
-                          photoArray.push(link);
-                          return post.display_url
-                        }
-                    } else {
-                        // console.log('Image does not exist.');
-                    }
-                  }).catch(function(error) {
-                    // console.log('error',error);
-                  })
+            //       $desc = $('meta[name="description"]').attr('content')
 
-                // var photo = fetch(post.display_url, { method: 'HEAD' })
-                // .then(res => {
-                //     if (res.ok ) {
-                //         var link = post.display_url.substring(0, post.display_url.indexOf('?'));
-                //         if(photoArray.includes(link)){
-                //           console.log('Image repetition.');  
-                //         } else {
-                //           console.log('Image exists.');
-                //           photoArray.push(link);
-                //           return post.display_url
-                //         }
-                //     } else {
-                //         console.log('Image does not exist.');
-                //     }
-                // }).catch(err => console.log('Error:', err));
+            //       callback($desc);
+            //   }
+            // };
 
-                return photo
-            };
+            // async function filterPhotos(posts) {
+            //     let result = [];
 
-            //12) get description from website
-            async function getDescription (link, callback){
-              if(!link || link == null){
-                // console.log('link',link);
-                callback('some text')
-              } else {
-                // setTimeout(function() 
-                // {
-                  var { data } = await axios.get(link)
+            //     while (posts.length) {
+            //         let batch = posts.splice(0,3); // make 3 requests in parallel
 
-                  var $ = cheerio.load(data,{
-                     ignoreWhitespace: true
-                   });
+            //         let batchResult = await Promise.all(batch.map(x => {
+            //             return checkResource(x);
+            //         }));
 
-                  $desc = $('meta[name="description"]').attr('content')
+            //         result = result.concat(batchResult);
+            //     }
+            //     return result;
+            // }
 
-                  callback($desc);
-                // }, 1000)
-              }
-            };
+            // var photos = await filterPhotos(posts)
 
-            const PhotoData = await new Promise(resolve => getMainPhoto(locationData[0], result => resolve(result)))
-
-            // console.log('console_check_10','PhotoData',PhotoData);
-
-            var filterPhotos = posts => Promise.all(posts.map(checkResource));
-            var photos = await filterPhotos(posts)
-
-            // console.log('console_check_11','photos',photos);
-
-            const description = await new Promise(resolve => getDescription(PhotoData.url, result => resolve(result)))
-
-            // console.log('console_check_12','description',description);
+            // const PhotoData = await new Promise(resolve => getMainPhoto(locationData[0], result => resolve(result)))
+            // const description = await new Promise(resolve => getDescription(PhotoData.url, result => resolve(result)))
 
             return Object.assign(locationData[0], {
-              photo: photos.length != null ? photos.filter(Boolean) : PhotoData.photo,
-              // photo: await filterPhotos(posts),
-              mainphoto: PhotoData.photo,
-              description: description
+              photo: [
+                'https://scontent-frt3-1.cdninstagram.com/v/t51.2885-15/sh0.08/e35/c0.180.1440.1440a/s640x640/67451683_1162223687313525_9073398506671709435_n.jpg?_nc_ht=scontent-frt3-1.cdninstagram.com&_nc_cat=109&_nc_ohc=Scb_MV4TUHoAX-GSCkD&oh=d8c6f3e221e8fa94129461d871bbc958&oe=5EC97B45',
+                'https://scontent-frt3-1.cdninstagram.com/v/t51.2815-15/sh0.08/e35/c0.180.1440.1440a/s640x640/67451683_1162223687313525_9073398506671709435_n.jpg?_nc_ht=scontent-frt3-1.cdninstagram.com&_nc_cat=109&_nc_ohc=Scb_MV4TUHoAX-GSCkD&oh=d8c6f3e221e8fa94129461d871bbc958&oe=5EC97B45'
+              ],//photos.length != null ? photos.filter(Boolean) : PhotoData.photo,
+              // mainphoto: PhotoData.photo,
+              // description: description
             })
         }
       }
 
+      async function setLocationData(filteredHashes) {
+          let result = [];
 
+          while (filteredHashes.length) {
+              let batch = filteredHashes.splice(0,5); // make 3 requests in parallel
 
+              let batchResult = await Promise.all(batch.map(x => {
+                  return getLocationData(x);
+              }));
 
-
-
-      const setLocationData = filteredHashes => Promise.all(filteredHashes.map(getLocationData));
+              result = result.concat(batchResult);
+          }
+          return result;
+      }
 
       const locationsData = await setLocationData(filteredHashes);
 
@@ -344,33 +237,10 @@ module.exports = {
         throw new ApiError('LOCATIONS_EMPTY');
       }
 
-      const middle = locationsData.filter(Boolean);
-      // console.log('console_check_13','locationsData',locationsData);
-      // middle.map(location => console.log('console_check_13','locationsData.each',location.name));
-      // console.log('console_check_13','locationsData.length',middle.length);
-
-      // {
-      //   name: 'Ресторан',
-      //   address: 'Россия, Москва',
-      //   website: '',
-      //   phone: '',
-      //   type: 'Ресторан',
-      //   workhours: '',
-      //   lat: '55.755826',
-      //   lon: '37.6172999',
-      //   maintag: 'Ресторан\n',
-      //   photo: [
-      //     'https://scontent-frx5-1.cdninstagram.com/v/t51.2885-15/e35/18096445_681996005336290_7839002746190561280_n.jpg?_nc_ht=scontent-frx5-1.cdninstagram.com&_nc_cat=110&_nc_ohc=bZAQZgCr_N8AX-vqkEp&oh=50f7ba21dab5340cdd188d057fd2633f&oe=5ECAF8A0',
-      //   ]
-      // },
-
-
-      //10) sort by distance  -----> REMOVE AFTER UPLOAD NEW DATA 
-      const test = middle.map((item) => {
+      const test = locationsData.filter(Boolean).map((item) => {
 
         if(item != null){
          return Object.assign(
-          // id: , -----> TODO_1 = SET SOMETHING
           {latitude: item.lat}, 
           {longitude: item.lon}, 
           {googleLink: 'https://www.google.com/maps/place/'+ item.address.trim() +'/@'+ item.lat + ',' + item.lon},
@@ -389,7 +259,6 @@ module.exports = {
           ]},
           {item}) 
         }
-        // delete Object.assign(item, {['title']: item['name'] })['name'];
       })
 
       const opts = {
@@ -405,27 +274,21 @@ module.exports = {
         results = test
       }
 
-      // console.log('console_check_14','results.length',results.length);
-
       const final = results.filter(location => {
         if(location != null){//&& location.item.photo != undefined && location.item.photo.length != 0
           return location
         }else{
-          // console.log('UNDEFINED')
           return false
         }
       })
 
-      // console.log('console_check_15','final.length',final.length);
-
       const finalresult = final[Math.floor(Math.random() * final.length)];
 
       res.json(final);
-      // res.json(finalresult);
     } catch (error) {
       return next(error);
     }
-  },
+  },  
   skipRecommendation: async (req, res, next) => {
     try {
       const { recommendationId } = req.body;
