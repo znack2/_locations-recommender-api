@@ -58,6 +58,13 @@ async function searchLocation3(locationIds = []) {//categories
     },
     { ignore: [404] }
   );
+    //   {
+    //   id: '100010000410096',
+    //   name: 'Л.Кнопа',
+    //   hash: ' особняккнопа',
+    //   type: ' Музей-усадьба'
+    // },
+  
   // console.log('search',body);
   return body.hits.hits.map(({_source}) => _source);
 }
@@ -96,6 +103,7 @@ async function searchPosts(hash) {
     {
       index: "insta_data-*",
         body: {
+          _source: ["insta_description", "thumbnail_src", "display_url"],
           query: {
             bool: {
               should: {
@@ -118,6 +126,44 @@ async function searchPosts(hash) {
     },
     { ignore: [404] }
   );
+
+        // {
+        //   comments_disabled: false,
+        //   location: {
+        //     slug: 'sweet-museum',
+        //     id: '481634818906206',
+        //     has_public_page: true,
+        //     name: 'Sweet Museum'
+        //   },
+        //   did_report_as_spam: false,
+        //   viewer_has_liked: false,
+        //   edge_media_preview_like: { count: 60 },
+        //   fact_check_information: null,
+        //   edge_media_to_comment: { count: 0 },
+        //   is_video: false,
+        //   accessibility_caption: 'Photo by ✨ 𝓘𝓻𝓮𝓷𝓪 𝓣𝓻𝓲𝓼𝓱 ✨ in Sweet Museum. Image may contain: one or more people',
+        //   owner: { username: 'irena_trish', id: '461076609' },
+        //   display_url: 'https://scontent-frt3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/66346490_2930842733652374_2743469691561075586_n.jpg?_nc_ht=scontent-frt3-1.cdninstagram.com&_nc_cat=102&_nc_ohc=USpS3f5PBuoAX_sGxW1&oh=9cc56fb84b1327a7a3e79c52443b972c&oe=5EC8EB62',
+        //   edge_liked_by: { count: 60 },
+        //   gating_info: null,
+        //   '@version': '1',
+        //   dimensions: { height: 1350, width: 1080 },
+        //   edge_media_to_caption: {},
+        //   text: '',
+        //   fact_check_overall_rating: null,
+        //   media_preview: '',
+        //   shortcode: 'B02jZPfH5LB',
+        //   __typename: 'GraphImage',
+        //   created_at: 0,
+        //   id: '2105025542085382849',
+        //   '@timestamp': '2020-04-22T18:57:33.896Z',
+        //   insta_description: 'Ph: @tetyaksusha \n' +
+        //     '#девичникмосква #девичникэтодух #девичникподруги #девичникамногонебывает #москва #взаимныеподписки #сладкиймузей🍭 #свадебныйдевичник  #сладкиймузеймосква #sweetmuseum #взаимныелайки #sweet #happy #msk мск #sexy #кола #cocacola #rose #pink #happy #goodday #розовый',
+        //   taken_at_timestamp: 1565158621,
+        //   thumbnail_src: 'https://scontent-frt3-1.cdninstagram.com/v/t51.2885-15/sh0.08/e35/c0.180.1440.1440a/s640x640/66346490_2930842733652374_2743469691561075586_n.jpg?_nc_ht=scontent-frt3-1.cdninstagram.com&_nc_cat=102&_nc_ohc=USpS3f5PBuoAX_sGxW1&oh=9e12747524a69c1515ccd3b42e51e4d3&oe=5ECBA6C6',
+        //   is_restricted_pending: false
+        // }
+
   // console.log('search',body);
   return body.hits.hits.map(({_source}) => _source);
 }
@@ -133,25 +179,47 @@ async function searchLocations(name) //categories
 
   // console.log('conditions',conditions);
 
+
+
   const { body } = await client.search(
     {
       index: "locations2",
       body: {
         query: {
-          bool: {
-            // should: conditions,
-            should: {
-              match: {
-                "name": name,
-              },
-              // conditions
-            },
-          },
+            // "constant_score" : {
+                // "filter" : {
+                    "term" : {
+                        "name.keyword" : name
+                    }
+                // }
+            // }
+          // bool: {
+          //   // should: conditions,
+          //   must: {
+          //     match: {
+          //       "name": name,
+          //     },
+          //     // conditions
+          //   },
+          // },
         },
       },
     },
     { ignore: [404] }
   );
+
+      // {
+      //   name: 'Китайский летчик Джао Да',
+      //   address: 'Россия, Москва, Лубянский проезд, 25, стр. 1',
+      //   website: 'http://www.jao-da.ru/',
+      //   phone: '+7 (495) 624-56-11 +7 (495) 623-28-96',
+      //   type: 'Кафе Ресторан Ночной клуб',
+      //   workhours: 'пн-пт 11:00–6:00, сб,вс 12:00–6:00',
+      //   lat: '55.7549148',
+      //   lon: '37.634553',
+      //   maintag: 'КитайскийлетчикДжаоДа\n'
+      // },
+          
   // console.log('search',body);
   return body.hits.hits.map(({_source}) => _source);
 }

@@ -3,10 +3,14 @@ const path = require('path');
 const express = require("express");
 const routes = require("./routes");
 const errorHandler = require("./middlewares/errorHandler");
+const timeout = require('connect-timeout'); //express v4
+
 
 module.exports = {
   runServer: () => {
     const app = express();
+
+    app.use(timeout('10s')); 
 
     app.use((req, res, next) => {
       res.set('Access-Control-Allow-Origin', '*');
@@ -38,6 +42,12 @@ module.exports = {
     app.use(routes);
 
     app.use(errorHandler);
+
+    app.use(haltOnTimedout);
+
+    function haltOnTimedout(req, res, next){
+      if (!req.timedout) next();
+    }
 
     return new Promise(resolve => {
       const server = app.listen(config.get('app.port'), () => {
