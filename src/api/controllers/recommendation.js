@@ -313,8 +313,8 @@ module.exports = {
 
             // console.log('console_check_10','PhotoData',PhotoData);
 
-            // var filterPhotos = posts => Promise.all(posts.map(checkResource));
-            // var photos = await filterPhotos(posts)
+            var filterPhotos = posts => Promise.all(posts.map(checkResource));
+            var photos = await filterPhotos(posts)
 
             // console.log('console_check_11','photos',photos);
 
@@ -323,7 +323,7 @@ module.exports = {
             // console.log('console_check_12','description',description);
 
             return Object.assign(locationData[0], {
-              // photo: photos.length != null ? photos.filter(Boolean) : PhotoData.photo,
+              photo: photos.length != null ? photos.filter(Boolean) : PhotoData.photo,
               // photo: await filterPhotos(posts),
               mainphoto: PhotoData.photo,
               description: description
