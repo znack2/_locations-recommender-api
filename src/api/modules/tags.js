@@ -176,7 +176,16 @@ async function getHashes (userId, categoryId){
       console.log('result',result)
 
       //if nothing found get first maintag from categories
-      if(result.length == 0){//result[0] == undefined
+      // if(result.length == 0){
+      for (var i = result.length - 1; i >= 0; i--) {
+        if(result[i] != undefined)
+        {
+          var exist = result[i]
+        }
+      }
+      // }
+
+      if(!exist){
         var id = categoryId ? categoryId : 5;
         var object = categories[id]
         result = [Object.keys(object)[0]]
