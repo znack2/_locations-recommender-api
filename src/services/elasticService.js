@@ -95,22 +95,26 @@ async function searchTags(tags = []) {
 }
 
 // search by hashtag in insta-data-*
-async function searchPosts(hash) {
+async function searchPosts(maintags) {
 
-  // console.log('search6',hash);
+  const conditions = maintags.map((tag) => ({
+    match: {
+      "insta_description": tag,
+    },
+  }));  
+  
+  console.log('searchPosts',maintags);
 
   const { body } = await client.search(
     {
       index: "insta_data-*",
         body: {
           _source: ["insta_description", "thumbnail_src", "display_url"],
+          from:0,
+          size:10,
           query: {
             bool: {
-              should: {
-                match: {
-                  "insta_description": hash,
-                },
-              }
+              should: conditions
             },
           },
          //  "query":{  
@@ -185,6 +189,8 @@ async function searchLocations(name) //categories
     {
       index: "locations2",
       body: {
+        from:0,
+        size:400,
         query: {
             // "constant_score" : {
                 // "filter" : {
@@ -224,10 +230,87 @@ async function searchLocations(name) //categories
   return body.hits.hits.map(({_source}) => _source);
 }
 
+//get location info by hashtag in location4
+async function searchLocations4(selectedTag,categoryId) 
+{
+  // const conditions = categories.map((category) => ({
+  //   match: {
+  //     "type": category
+  //   },
+  // }));
+
+  // console.log('conditions',conditions);
+
+  console.log('selectedTag',selectedTag)
+  console.log('categoryId',categoryId)
+
+  const { body } = await client.search(
+    {
+      index: "locations4",
+      body: {
+        from:0,
+        size:40,
+        query: {
+          // "dis_max": {
+          //   "queries": [
+          //     { "match": { "mainkeyword": selectedTag }},
+          //     { "match": { "category": categoryId }}
+          //   ],
+          //   "tie_breaker": 0.3
+          // }
+          bool: {
+            // should: {
+            //   match: {
+            //     "mainkeyword": selectedTag,
+            //   },              
+            //   match: {
+            //     "category": categoryId,
+            //   },
+            // }
+            "must": [
+              {
+                "term": {
+                  "mainkeyword": selectedTag
+                }
+              },
+              {
+                "term": {
+                  "category": categoryId
+                }
+              }
+            ],
+          },
+        },
+      },
+    },
+    { ignore: [404] }
+  );
+
+    // name: 'SimpleWine',
+    // address: 'Россия, Москва, Гончарная улица, 40/8',
+    // website: 'http://www.jao-da.ru/',
+    // phone: '+7 (495) 624-56-11 +7 (495) 623-28-96',
+    // type: 'Магазин алкогольных напитков',
+    // workhours: 'пн-пт 11:00–6:00, сб,вс 12:00–6:00',
+    // lat: '55.740316',
+    // lon: '37.650787',
+    // map: 'https://static-maps.yandex.ru/1.x/?lang=&ll=37.650787,55.740316&size=450,450&z=18&l=map&pt=37.650787,55.740316,pm2rdl1~37.650787,55.740316,flag',
+    // description: '',
+    // maintag_2: '',
+    // maintag: 'SimpleWine\n',
+    // category: '1',
+    // mainkeyword: 'вино',
+    // img: 'https://mir-s3-cdn-cf.behance.net/project_modules/1400/709fbb78641003.5ced7825c4286.png'
+          
+  // console.log('search',body);
+  return body.hits.hits.map(({_source}) => _source);
+}
+
 module.exports = { 
   // search,
   searchTags,
   searchLocation3,
+  searchLocations4,
   searchLocations,
   searchPosts
 }

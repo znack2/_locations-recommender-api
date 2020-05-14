@@ -8,6 +8,8 @@ module.exports = {
 
       const user = await models.users.findOne({ id: userId });
 
+      user.profile_photo = '';
+
       res.json(user);
     } catch (error) {
       return next(error);

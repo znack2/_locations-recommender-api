@@ -1,5 +1,4 @@
 const ApiError = require('../errors/ApiError');
-const models = require('../../models');
 const sortByDistance = require('sort-by-distance');
 // const yandeximages = require("yandex-images");
 const fetch = require('node-fetch');
@@ -12,15 +11,13 @@ var {image_search} = require("duckduckgo-images-api");
 // var search = require('image-search');
 // var rp = require('request-promise');
 
+const { getHashes } = require('../modules/tags');
 
-const { getRecomendations } = require('../../services/personalizeService');
 // const { getUserPreferences } = require('../../controllers/user');
 
 const { 
-  // search,
-  searchTags,
-  searchLocation3,
   searchLocations,
+  searchLocations4,
   searchPosts
 } = require('../../services/elasticService');
 
@@ -28,263 +25,315 @@ const {
 module.exports = {
   getRecommendation: async (req, res, next) => {
     try {
-      const { userId } = req.session;
+      const { userId } = req.session;//categoryId
 
-      const currentLocation = req.query.currentLocation 
-        ? req.query.recommendationId 
-        : {"lat":54.7501898,"lan":36.795363099999996};
+      // console.log('req.query.currentLocation',req.query.currentLocation != undefined)
 
-      const categoryId = req.query.recommendationId ? req.query.recommendationId : 5;
+      const currentLocation = req.query.currentLocation != undefined 
+        ? req.query.currentLocation 
+        : {"lat":55.761429,"lan":37.601048};
+        // : {"lat":54.7501898,"lan":36.795363099999996};
 
-      const preferences = await models.userPreferences.find({ userId }, ['preference'])
-        .then(preferences => preferences.map(({ preference }) => preference));
+      console.log('currentLocation',currentLocation)
 
-      const tags = await searchTags(preferences);
+      const categoryId = req.query.recommendationId;
 
-      var uniqueLocationIds;
+      console.log('categoryId',categoryId)
 
-      if(!tags || tags === undefined || tags.length == 0)
-        {
-          uniqueLocationIds = await getRecomendations('кафе');
-        } 
-      else 
-        {
-          var finallocationIds = [];
+      const filteredHashes = await getHashes(userId,categoryId);
 
-          for (var i = tags.length - 1; i >= 0; i--) {
-            var locationIds = await getRecomendations(tags[i].HashTag);
-            finallocationIds.push(locationIds);
-          }
-          uniqueLocationIds = [...new Set(finallocationIds.flat())];
-        }
+      var finalresult = []
 
-      if(!uniqueLocationIds){
-        throw new ApiError('PERSONALIZE_EMPTY');
-      }
+      if(filteredHashes['tags'][0] != undefined){
+          console.log('filteredHashes',filteredHashes)
+  
+          // function timeout(ms, promise) {
+          //   return new Promise(function(resolve, reject) {
+          //     setTimeout(function() {
+          //       reject(new Error("timeout"))
+          //       // console.log('timeout');
+          //     }, ms)
+          //     promise.then(resolve, reject)
+          //   })
+          // }
 
-      const locationHashes = await searchLocation3(uniqueLocationIds);
+          const getLocationData = async (selectedTag,categoryId) => {
+           // const getLocationData = async location => {
 
-      if(!locationHashes){
-        throw new ApiError('LOCATIONS3_EMPTY');
-      }
+            //new
+            // return await searchLocations4(selectedTag,categoryId)
+            var locationData = await searchLocations4(selectedTag,categoryId)
 
-      var categories;
+            console.log('locationData.length',locationData.length)
+            //old
+            // var locationData = await searchLocations(location.name)//categories
 
-      switch (categoryId) {
-        case '1':
-         categories = ['музей','Достопримечательность','Клуб для детей и подростков','Курсы','мастер-классы'];
-          break;
-        case '2':
-         categories = ['концерт','Ночной клуб','Караоке-клуб','Концертный зал','Блядство разврат наркотики','клуб','разврат','Рок'];
-          break;
-        case '3':
-         categories = ['Ресторан','кафе','бар','паб','столовая','Пиццерия','Кофейня','Кондитерская','кухня'];
-          break;
-        case '4':
-         categories = ['выставка','Современный','Художественный','салон','Выставочный центр','Антикварный магазин','Парк аттракционов','Развлекательный центр','Аттракцион'];
-          break;
-        default:
-          categories = ['музей','кафе','выставка','клуб','кухня','Рок'];
-      }
+            // console.log('inside','locationData.length',locationData.length);
 
-      const filteredHashes = locationHashes.filter(location => {
-        if(location.type != null){
-          var words = location.type.split(' ').filter(Boolean)
-          var result = words.map(word => {
-            return categories.includes(word)
-          })
-
-          if(result.includes(true)){
-            return location
-          }
-        }
-      });
-
-      function timeout(ms, promise) {
-        return new Promise(function(resolve, reject) {
-          setTimeout(function() {
-            reject(new Error("timeout"))
-            // console.log('timeout');
-          }, ms)
-          promise.then(resolve, reject)
-        })
-      }
-
-      const getLocationData = async location => {
-
-        var locationData = await searchLocations(location.name)//categories
-
-        if(locationData.length == 0){
-          return;
-        }
-        var posts = await searchPosts(location.hash);
-       
-        if(!posts){
-          throw new ApiError('POSTS_EMPTY');
-        }
-
-        if(locationData[0] != null){
-
-            // async function getMainPhoto (location, callback){
-
-            //   if(location.website && location.website !== undefined){
-
-            //       var query = location.website.replace(/(^\w+:|^)\/\//, '');//.slice(0,-1);// + '&iax=images&ia=images';
-            //       image_search({ query: query, moderate: false }, 2, 1)
-            //         .then(function(result) {
-            //         if (result && result !== undefined && result[0] !== undefined) {
-            //             // console.log('duckduckGo ok.');
-            //             callback({
-            //               photo:result[0].image, 
-            //               url:result[0].url
-            //             })
-            //         } else {
-            //             callback({
-            //               photo: 'https://img.freepik.com/free-vector/colorful-smooth-gradient-background_97886-980.jpg?size=626&ext=jpg', 
-            //               url: null
-            //             })
-            //         }
-            //       }).catch(function(error) { })
-            //   }
-            // };
-
-            // async function checkResource(post){//const functionName = async post => 
-            //   var photoArray = [];
-
-            //   if(post && post != undefined){
-
-            //     var photo = fetch(post.display_url, { method: 'HEAD' }).then(function(result) {
-            //         if (result.ok) {
-            //             var link = post.display_url.substring(0, post.display_url.indexOf('?'));
-            //             if(photoArray.includes(link)){
-            //             } else {
-            //               photoArray.push(link);
-            //               return post.display_url
-            //             }
-            //         } else {
-            //         }
-            //       }).catch(function(error) {
-            //       })
-            //     return photo
-            //   }
-            // };
-
-            // async function getDescription (link, callback){
-            //   if(!link || link == null){
-            //     callback('some text')
-            //   } else {
-            //       var { data } = await axios.get(link)
-
-            //       var $ = cheerio.load(data,{
-            //          ignoreWhitespace: true
-            //        });
-
-            //       $desc = $('meta[name="description"]').attr('content')
-
-            //       callback($desc);
-            //   }
-            // };
-
-            // async function filterPhotos(posts) {
-            //     let result = [];
-
-            //     while (posts.length) {
-            //         let batch = posts.splice(0,3); // make 3 requests in parallel
-
-            //         let batchResult = await Promise.all(batch.map(x => {
-            //             return checkResource(x);
-            //         }));
-
-            //         result = result.concat(batchResult);
-            //     }
-            //     return result;
+            // if(locationData.length == 0){
+            //   return;
             // }
 
-            // var photos = await filterPhotos(posts)
+            //old
+            // var posts = await searchPosts(location.hash);
 
-            // const PhotoData = await new Promise(resolve => getMainPhoto(locationData[0], result => resolve(result)))
-            // const description = await new Promise(resolve => getDescription(PhotoData.url, result => resolve(result)))
+            // if(!posts){
+            //   throw new ApiError('POSTS_EMPTY');
+            // }
 
-            return Object.assign(locationData[0], {
-              photo: [
-                'https://scontent-frt3-1.cdninstagram.com/v/t51.2885-15/sh0.08/e35/c0.180.1440.1440a/s640x640/67451683_1162223687313525_9073398506671709435_n.jpg?_nc_ht=scontent-frt3-1.cdninstagram.com&_nc_cat=109&_nc_ohc=Scb_MV4TUHoAX-GSCkD&oh=d8c6f3e221e8fa94129461d871bbc958&oe=5EC97B45',
-                'https://scontent-frt3-1.cdninstagram.com/v/t51.2815-15/sh0.08/e35/c0.180.1440.1440a/s640x640/67451683_1162223687313525_9073398506671709435_n.jpg?_nc_ht=scontent-frt3-1.cdninstagram.com&_nc_cat=109&_nc_ohc=Scb_MV4TUHoAX-GSCkD&oh=d8c6f3e221e8fa94129461d871bbc958&oe=5EC97B45'
-              ],//photos.length != null ? photos.filter(Boolean) : PhotoData.photo,
-              // mainphoto: PhotoData.photo,
-              // description: description
-            })
-        }
-      }
+            // if(locationData[0] != null){
 
-      async function setLocationData(filteredHashes) {
-          let result = [];
+                // async function getMainPhoto (location, callback){
 
-          while (filteredHashes.length) {
-              let batch = filteredHashes.splice(0,5); // make 3 requests in parallel
+                //   if(location.website && location.website !== undefined){
 
-              let batchResult = await Promise.all(batch.map(x => {
-                  return getLocationData(x);
-              }));
+                //       var query = location.website.replace(/(^\w+:|^)\/\//, '');//.slice(0,-1);// + '&iax=images&ia=images';
+                //       image_search({ query: query, moderate: false }, 2, 1)
+                //         .then(function(result) {
+                //         if (result && result !== undefined && result[0] !== undefined) {
+                //             // console.log('duckduckGo ok.');
+                //             callback({
+                //               photo:result[0].image, 
+                //               url:result[0].url
+                //             })
+                //         } else {
+                //             callback({
+                //               photo: 'https://img.freepik.com/free-vector/colorful-smooth-gradient-background_97886-980.jpg?size=626&ext=jpg', 
+                //               url: null
+                //             })
+                //         }
+                //       }).catch(function(error) { })
+                //   }
+                // };
 
-              result = result.concat(batchResult);
+                async function getPosts (location, callback){
+                  if(location.maintag && location.maintag !== undefined || location.maintag_2 && location.maintag_2 !== undefined){
+                  // if(location.website && location.website !== undefined){
+                    var posts = await searchPosts([location.maintag]);//location.maintag_2
+
+                    const result = posts.filter(post => !post.insta_description.includes('доктор'))
+                         .map(post => {return post.display_url});
+
+                    // console.log('posts_result',result);
+
+                    result.push(location.img)
+
+                    callback(result);
+                  }
+                };
+
+                // async function checkResource(post){//const functionName = async post => 
+                //   var photoArray = [];
+
+                //   if(post && post != undefined){
+
+                //     var photo = fetch(post.display_url, { method: 'HEAD' }).then(function(result) {
+                //         if (result.ok) {
+                //             var link = post.display_url.substring(0, post.display_url.indexOf('?'));
+                //             if(photoArray.includes(link)){
+                //             } else {
+                //               photoArray.push(link);
+                //               return post.display_url
+                //             }
+                //         } else {
+                //         }
+                //       }).catch(function(error) {
+                //       })
+                //     return photo
+                //   }
+                // };
+
+                // async function getDescription (link, callback){
+                //   if(!link || link == null){
+                //     callback('some text')
+                //   } else {
+                //       var { data } = await axios.get(link)
+
+                //       var $ = cheerio.load(data,{
+                //          ignoreWhitespace: true
+                //        });
+
+                //       $desc = $('meta[name="description"]').attr('content')
+
+                //       callback($desc);
+                //   }
+                // };
+
+                // async function filterPhotos(posts) {
+                //     let result = [];
+
+                //     while (posts.length) {
+                //         let batch = posts.splice(0,3); // make 3 requests in parallel
+
+                //         let batchResult = await Promise.all(batch.map(x => {
+                //             return checkResource(x);
+                //         }));
+
+                //         result = result.concat(batchResult);
+                //     }
+                //     return result;
+                // }
+
+                // var photos = await filterPhotos(posts)
+
+                // const PhotoData = await new Promise(resolve => getMainPhoto(locationData[0], result => resolve(result)))
+                // const description = await new Promise(resolve => getDescription(PhotoData.url, result => resolve(result)))
+
+                const result = []
+
+                for (var i = locationData.length - 1; i >= 0; i--) {
+                  result.push(Object.assign(locationData[i], {
+                    mainphoto: locationData[i].img,
+                    // photo: [
+                    //   'https://scontent-frt3-1.cdninstagram.com/v/t51.2885-15/sh0.08/e35/c0.180.1440.1440a/s640x640/67451683_1162223687313525_9073398506671709435_n.jpg?_nc_ht=scontent-frt3-1.cdninstagram.com&_nc_cat=109&_nc_ohc=Scb_MV4TUHoAX-GSCkD&oh=d8c6f3e221e8fa94129461d871bbc958&oe=5EC97B45',
+                    //   'https://scontent-frt3-1.cdninstagram.com/v/t51.2815-15/sh0.08/e35/c0.180.1440.1440a/s640x640/67451683_1162223687313525_9073398506671709435_n.jpg?_nc_ht=scontent-frt3-1.cdninstagram.com&_nc_cat=109&_nc_ohc=Scb_MV4TUHoAX-GSCkD&oh=d8c6f3e221e8fa94129461d871bbc958&oe=5EC97B45'
+                    // ],
+                    // photo: photos.length != null ? photos.filter(Boolean) : PhotoData.photo,
+                    photo: await new Promise(resolve => getPosts(locationData[i], result => resolve(result)))
+                    // photo: posts.length != null ? posts.filter(post => !post.insta_description.includes('доктор')).map(post => post.display_url) : PhotoData.photo,
+                    // mainphoto: PhotoData.photo,
+                    // description: description
+                  }))
+                }
+
+                return result
+
+                console.log('result',result)
+                console.log('result.length',result.length)
+                console.log('--------------')
+                console.log(die)
+            // }
           }
-          return result;
-      }
 
-      const locationsData = await setLocationData(filteredHashes);
+          // DEVIDE INTO CHUNKS
+          // async function setLocationData(filteredHashes) {
+          //     let result = [];
+          //     while (filteredHashes.length) {
+          //         let batch = filteredHashes.splice(0,5); // make 3 requests in parallel
+          //         let batchResult = await Promise.all(batch.map(x => {
+          //             return getLocationData(x);
+          //         }));
+          //         result = result.concat(batchResult);
+          //     }
+          //     return result;
+          // }
 
-      if(!locationsData){
-        throw new ApiError('LOCATIONS_EMPTY');
-      }
+          const setLocationData = (tags,categoryId) => Promise.all(tags.map(tag => getLocationData(tag,categoryId)));
 
-      const test = locationsData.filter(Boolean).map((item) => {
+          const locationsData = await setLocationData(filteredHashes['tags'],filteredHashes['categoryId']);
 
-        if(item != null){
-         return Object.assign(
-          {latitude: item.lat}, 
-          {longitude: item.lon}, 
-          {googleLink: 'https://www.google.com/maps/place/'+ item.address.trim() +'/@'+ item.lat + ',' + item.lon},
-          {description: item.description}, //-----> TODO_2 = SET HERE TEXT
-          {positiveReviews: Math.floor(Math.random() * 100)}, //-----> TODO_3 = RATING LOGIC ADD
-          {negativeReviews: Math.floor(Math.random() * 100)}, //-----> TODO_3 = RATING LOGIC ADD
-          {averageBillUSD: Math.floor(Math.random() * 100)}, //-----> TODO_4 = GET FROM GOOGLE/YANDEX/SITE
-          {restriction: null},
-          {numberOfUsersSelectedThisLocation: item.photo != undefined ? item.photo.length : Math.floor(Math.random() * 100)}, 
-          {lastFiveUsersSelectedThisLocation: [ //-----> TODO_4 = GET REAL USER PHOTOS
-            'https://scontent-frt3-2.cdninstagram.com/v/t51.2885-15/e15/10986232_792204010864591_1943951351_n.jpg?_nc_ht=scontent-frt3-2.cdninstagram.com&_nc_cat=107&_nc_ohc=0CefYx0zadQAX8p5bip&oh=fcd26afd66d0b7457361ae7fe17d085e&oe=5EB31E94',
-            'https://scontent-sjc3-1.cdninstagram.com/v/t51.2885-15/e35/22708961_137397253576283_1641343055204188160_n.jpg?_nc_ht=scontent-sjc3-1.cdninstagram.com&_nc_cat=111&_nc_ohc=OfmyBIOuIeYAX8nTOit&oh=f1ba466480f93e66485892d710fa4b1a&oe=5EB044C8',
-            'https://scontent-sjc3-1.cdninstagram.com/v/t51.2885-15/e35/s1080x1080/71024040_130228614600586_7919094803550290139_n.jpg?_nc_ht=scontent-sjc3-1.cdninstagram.com&_nc_cat=110&_nc_ohc=y4DWTigwpR8AX9xvyj4&oh=29a25d5b1ca3fe8e819f568107e605b3&oe=5EAE41D7',
-            'https://scontent-sjc3-1.cdninstagram.com/v/t51.2885-15/e35/s1080x1080/82093019_2496883707190074_7533803060583622926_n.jpg?_nc_ht=scontent-sjc3-1.cdninstagram.com&_nc_cat=106&_nc_ohc=UPkeN14n8nsAX9UCYqq&oh=9c3fff6fb03b4a5727809198c9f6dacc&oe=5EAF176E',
-            'https://scontent-sjc3-1.cdninstagram.com/v/t51.2885-15/fr/e15/s1080x1080/88257534_538727656756767_5275621189640973434_n.jpg?_nc_ht=scontent-sjc3-1.cdninstagram.com&_nc_cat=103&_nc_ohc=Dlvjhc4WN0UAX8xjzEK&oh=3d967b5544d0dd27ef0e41119a90294e&oe=5EADCFDB',
-          ]},
-          {item}) 
-        }
-      })
+          const flatArray = locationsData.flat();
 
-      const opts = {
-        yName: 'latitude',
-        xName: 'longitude'
-      }
+          console.log('flatArray.length',flatArray.length);
+          // console.log('locationsData',locationsData);
+          console.log('----------------');
 
-      var results
+          if(!flatArray){
+            throw new ApiError('LOCATIONS_EMPTY');
+          }
 
-      if(currentLocation != null && test != null){
-        results = sortByDistance(currentLocation, test, opts)
-      }else{
-        results = test
-      }
+          //format return data
+          const test = flatArray.filter(Boolean).map((item) => {
+            if(item != null){
+             return Object.assign(
+              {latitude: item.lat}, 
+              {longitude: item.lon}, 
+              {googleLink: 'https://www.google.com/maps/place/'+ item.address.trim() +'/@'+ item.lat + ',' + item.lon},
+              // {description: item.description}, 
+              {positiveReviews: Math.floor(Math.random() * 100)}, //-----> TODO_3 = RATING LOGIC ADD
+              {negativeReviews: Math.floor(Math.random() * 100)}, //-----> TODO_3 = RATING LOGIC ADD
+              {averageBillUSD: Math.floor(Math.random() * 100)}, //-----> TODO_4 = GET FROM GOOGLE/YANDEX/SITE
+              {restriction: null}, //-----> TODO_5 = GET FROM GOOGLE/YANDEX/SITE
+              {numberOfUsersSelectedThisLocation: item.photo != undefined ? item.photo.length : Math.floor(Math.random() * 100)}, 
+              {lastFiveUsersSelectedThisLocation: [ //-----> TODO_6 = GET REAL USER PHOTOS
+                'https://scontent-hel2-1.cdninstagram.com/v/t51.2885-19/s150x150/95779124_2630482867272359_5467394879912935424_n.jpg?_nc_ht=scontent-hel2-1.cdninstagram.com&_nc_ohc=tOnpI8Z1V1wAX-arPmu&oh=7cc6c7a0d6227aba18a4e1b839aa7fe8&oe=5EDECD91',
+                'https://scontent-hel2-1.cdninstagram.com/v/t51.2885-19/s150x150/95749296_2481761685399011_1388421669617401856_n.jpg?_nc_ht=scontent-hel2-1.cdninstagram.com&_nc_ohc=NKqxKjvWd_MAX8h1t8Z&oh=c628d5f8db79c41a37e47f2b42160b9c&oe=5EDEB129',
+                'https://scontent-hel2-1.cdninstagram.com/v/t51.2885-19/s150x150/95316087_234854747800077_8831435638071885824_n.jpg?_nc_ht=scontent-hel2-1.cdninstagram.com&_nc_ohc=UUEYYW-exL8AX_vjWAX&oh=fbb276ed635b4255c5c8ec517a782ec2&oe=5EDF1538',
+                'https://scontent-hel2-1.cdninstagram.com/v/t51.2885-19/s150x150/59867561_370763203559266_6276927744840302592_n.jpg?_nc_ht=scontent-hel2-1.cdninstagram.com&_nc_ohc=jyJaft6ZXw0AX-Mwcai&oh=4445d5facea3d55d2181530e569bff7e&oe=5EDF5BD6',
+                'https://scontent-hel2-1.cdninstagram.com/v/t51.2885-19/s150x150/91022540_633085187539391_3943624432722903040_n.jpg?_nc_ht=scontent-hel2-1.cdninstagram.com&_nc_ohc=uUdoeOlrjcAAX_uYaS7&oh=2b8ca75c4022b1f2632aba7254b6df84&oe=5EDCACFE',
+              ]},
+              {item}) 
+            }
+          })
 
-      const final = results.filter(location => {
-        if(location != null){//&& location.item.photo != undefined && location.item.photo.length != 0
-          return location
-        }else{
-          return false
-        }
-      })
+          console.log('test.length',test.length);
 
-      const finalresult = final[Math.floor(Math.random() * final.length)];
+          // function checkTime(workhours){
+          //   // пн-пт 11:00–18:30
+          //   //пн-чт 10:00–22:00, пт-вс 10:00–23:00
+            
+          //   if(workhours != null){
+          //     //get current time
+          //     //get timeframe from 
 
-      res.json(final);
+          //     var time = [...workhours.matchAll('([0-1]?[0-9]|2[0-3]):[0-5][0-9]')];
+
+          //     for (var i = time.length - 1; i >= 0; i--) {
+          //       res = new Date(time[i]) > new Date()
+          //     }
+              
+          //     return false;
+          //   }
+          //   return true;
+          // }
+
+          var storage = []
+
+          //filter if empty
+          const final = test.filter(location => {
+
+            // const open = checkTime(location.item.workhours)
+
+            console.log('storage_contain',storage.includes(location.item.name));
+            // || open
+            if(location != null && location.item.photo != undefined && location.item.photo.length != 0 && !storage.includes(location.item.name)){
+              console.log('storage_before',storage.length);
+              storage.push(location.item.name)
+              console.log('storage_after',storage.length);
+              return location
+            }else{
+              return false
+            }
+          })
+
+          console.log('final.length',final.length);
+
+          //random
+          function randCol(final) {
+            var colArr = [];
+            for (var i = 0; i < 6; i++) {
+             //get only ONE random element
+              var rand = final[Math.floor(Math.random() * final.length)];
+              if(rand != null){
+                colArr.push(rand);
+              }
+            }
+            return colArr;
+          }
+
+          const result = randCol(final);
+
+          //distance
+          const opts = {
+            yName: 'latitude',
+            xName: 'longitude'
+          }
+
+          var finalresult
+
+          if(currentLocation != null && result != null){
+
+            result.map(element => console.log('before',element.item.name))
+            finalresult = sortByDistance(currentLocation, result, opts)
+            finalresult.map(element => console.log('after',element.item.name))
+
+          }else{
+            finalresult = result
+          }
+
+          console.log('finalresult.length',finalresult.length);
+      } 
+      res.json(finalresult);
     } catch (error) {
       return next(error);
     }

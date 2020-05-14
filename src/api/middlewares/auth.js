@@ -10,6 +10,7 @@ module.exports = async (req, res, next) => {
       if (session && session.active) {
         req.session = {
           userId: session.userId
+          // categoryId: categoryId,
         };
 
         return next();
