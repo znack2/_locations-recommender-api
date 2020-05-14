@@ -42,10 +42,11 @@ module.exports = {
 
       const filteredHashes = await getHashes(userId,categoryId);
 
+      console.log('filteredHashes',filteredHashes)
+
       var finalresult = []
 
       if(filteredHashes['tags'][0] != undefined){
-          console.log('filteredHashes',filteredHashes)
   
           // function timeout(ms, promise) {
           //   return new Promise(function(resolve, reject) {
@@ -285,8 +286,11 @@ module.exports = {
             // const open = checkTime(location.item.workhours)
 
             console.log('storage_contain',storage.includes(location.item.name));
+
+            var already = storage.includes(location.item.name)
+
             // || open
-            if(location != null && location.item.photo != undefined && location.item.photo.length != 0 && !storage.includes(location.item.name)){
+            if(location != null && location.item.photo != undefined && location.item.photo.length != 0 && already === false){
               console.log('storage_before',storage.length);
               storage.push(location.item.name)
               console.log('storage_after',storage.length);

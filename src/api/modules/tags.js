@@ -11,17 +11,18 @@ const {
 const categories = [];
 
 
-//  кухня'
-//  есть 
+// секс
 
-//eat
+//горы
+
 categories[1] = {
   //Быстрое питание
+  'ресторан':['кухня','есть','еда','eat','ресторан','кафе'],
   'фастфуд':['кола', 'спрайт', 'пепси', 'чипсы', 'фри', 'McDonald', 'мак', 'King', 'pepsi', 'cola', 'cocacola', 'coca-cola','sprite','fanta','пиццерия','пицца','pizza','Быстрое питание','фастфуд'],
-  'кофе':['кофе','кафе','кофейня','starbucks','капучино', 'cappuccino', 'латте', 'завтраки', 'coffee', 'cafe', 'americano', 'espresso', 'mocha', 'arabica', 'frappe', 'лавацца', 'lavazza', 'бариста','старбакс','капуч', 'капичинно'],
+  'кофе':['кофе','кофейня','starbucks','капучино', 'cappuccino', 'латте', 'завтраки', 'coffee', 'cafe', 'americano', 'espresso', 'mocha', 'arabica', 'frappe', 'лавацца', 'lavazza', 'бариста','старбакс','капуч', 'капичинно'],
   'пиво':['пиво', 'разливное', 'выпить','ale','эль','heineken','ипа','ipa','guinness','lager','pilsner','stella','draft', 'сидер', 'cider', 'beer', 'bar', 'pub'],
   'вино':['prosecco','champagne','sauvignon','merlot','chardonnay','moscato','просекко', 'мерло', 'шардоне','chianti','wine','вино','шампанское'],
-  'стейк':['стейк', 'говядина', 'свинина', 'курица', 'шашлык', 'баранина', 'burgers', 'бургеры', 'meat', 'мясо','шашлик'],
+  'стейк':['стейк', 'говядина', 'свинина', 'курица', 'шашлык', 'баранина', 'burgers', 'бургеры', 'meat', 'мясо','шашлик','бургеры','burger','борщ'],
   'рыбный ресторан':['морепродукты', 'краб', 'рак', 'креветки', 'устрицы', 'икра', 'рыба', 'sushi', 'суши', 'fish'],
   'веган':['веган', 'вегетариан','vegetarian', 'diet', 'vegan', 'виган'],
   'десерт':['cheesecake', 'торт', 'чизкейк', 'панакота', 'выпечка', 'сладости', 'маскарпоне', 'пирожное', 'десерт', 'чискейк']
@@ -29,16 +30,16 @@ categories[1] = {
 //listen
 categories[2] = {
   //stay
-  'клуб':['ночн', 'дискотек', 'коктели', 'бухло', 'party', 'club', 'вечеринк', 'баб', 'пат','клуб'],
+  'клуб':['ночной', 'дискотек', 'коктели', 'бухло', 'party', 'club', 'вечеринк', 'баб', 'пат','клуб','sex'],
   'караоке':['пение', 'вокал', 'karaoke', 'караоке'],
   // sit
-  'концерт':['шоу', 'opera', 'концерт', 'выступление', 'оркестр','рок','панк','rock','Концертный зал','concert'],
+  'концерт':['шоу', 'opera', 'концерт', 'выступление', 'оркестр','рок','панк','rock','Концертный зал','concert','чайковский'],
   'живаямузыка':['живая музыка', 'музыканты','джаз','livemusic','музыка']
 }
 //see
 categories[3] = {
   //inside
-  'выставка':['галерея', 'третьяковка', 'выставка', 'gallery','aнтикварный','рисовать'],
+  'выставка':['галерея', 'третьяковка', 'выставка', 'gallery','aнтикварный','рисовать','дизайн'],
   // graffiti:['photo', 'video', 'graffiti', 'графити', 'граффити' ],
   'мода':['одежда', 'стиль', 'мода', 'фэшн', 'модельеры', 'красота', 'образ', 'fasion', 'магазин', 'тц' , 'центр'],
   //outside
@@ -55,7 +56,7 @@ categories[3] = {
     //emotion sex
   // strip:['бабы', 'стрип', 'девки', 'телки', 'секс' ],
     // emotion cry
-  'театр':['театр', 'спектакли' ]
+  'театр':['театр', 'спектакли','шекспир','гамлет','отелло','пушкин']
 }
 //think
 categories[4] = {
@@ -73,7 +74,7 @@ categories[4] = {
 }
 //activity
 categories[5] = {
-  'спорт':['футбол', 'хоккей', 'баскетбол','спорт','sport','плавать'],
+  'спорт':['футбол', 'хоккей', 'баскетбол','спорт','sport','плавать','лыжи','горные лыжи','сноуборд'],
   'танцы':['хореография','сальса','dance','данс','танцы'],
   'дети':['игровая', 'площадка', 'playground', 'детская', 'комплекс', 'городок','дети','ребенок','развлекательный','аттракцион','играть'],
   'гонки':['driving', 'car', 'машина', 'мото', 'авто','вождение','картинг','гонки','стритрейсинг','carting'],
@@ -148,6 +149,8 @@ async function getFromPersonalize (tags)
 
 async function getHashes (userId, categoryId){
 
+      console.log('userId',userId)
+      
       //find tag in every categories but filter if only categoryId exist!
       function checkExistTag(preference) {
         var res;
@@ -170,12 +173,14 @@ async function getHashes (userId, categoryId){
       result = await models.userPreferences.find({ userId }, ['preference'])
         .then(preferences => preferences.map(({ preference }) => checkExistTag(preference)));
 
+      console.log('result',result)
+
       //if nothing found get first maintag from categories
-      if(result == undefined || result == null){
+      if(result.length == 0){//result[0] == undefined
         var id = categoryId ? categoryId : 5;
         var object = categories[id]
         result = [Object.keys(object)[0]]
-        console.log('result2',result)
+        console.log('result if nothing',result)
       }
 
       //filter if some not found
