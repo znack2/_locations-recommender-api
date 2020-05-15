@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/static/css/main.d381faa3.chunk.css",
-    "main.js": "/static/js/main.a33aba11.chunk.js",
-    "main.js.map": "/static/js/main.a33aba11.chunk.js.map",
+    "main.css": "/static/css/main.ec63e9d9.chunk.css",
+    "main.js": "/static/js/main.9217800f.chunk.js",
+    "main.js.map": "/static/js/main.9217800f.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.7bc62397.js",
     "runtime-main.js.map": "/static/js/runtime-main.7bc62397.js.map",
     "static/css/2.d63266c2.chunk.css": "/static/css/2.d63266c2.chunk.css",
     "static/js/2.bdf978ba.chunk.js": "/static/js/2.bdf978ba.chunk.js",
     "static/js/2.bdf978ba.chunk.js.map": "/static/js/2.bdf978ba.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.e7d4e30633eca68039fc7b5ffcf7cb50.js": "/precache-manifest.e7d4e30633eca68039fc7b5ffcf7cb50.js",
+    "precache-manifest.3074c728758bd4ee6f6710dac28f4b9a.js": "/precache-manifest.3074c728758bd4ee6f6710dac28f4b9a.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.d63266c2.chunk.css.map": "/static/css/2.d63266c2.chunk.css.map",
-    "static/css/main.d381faa3.chunk.css.map": "/static/css/main.d381faa3.chunk.css.map",
+    "static/css/main.ec63e9d9.chunk.css.map": "/static/css/main.ec63e9d9.chunk.css.map",
     "static/js/2.bdf978ba.chunk.js.LICENSE.txt": "/static/js/2.bdf978ba.chunk.js.LICENSE.txt",
     "static/media/blank.module.css": "/static/media/iphone_6_plus_white_port.3e3abb2f.png",
     "static/media/app-store-badge.svg": "/static/media/app-store-badge.d0558d91.svg",
@@ -31,6 +31,7 @@
     "static/media/circle.svg": "/static/media/circle.7e6dbccc.svg",
     "static/media/confirm.svg": "/static/media/confirm.20a2cdf8.svg",
     "static/media/confirm.474dbb16.svg": "/static/media/confirm.474dbb16.svg",
+    "static/media/index.css": "/static/media/defaultBg.3a6c9702.jpg",
     "static/media/foundation_sound.svg": "/static/media/foundation_sound.176e8de4.svg",
     "static/media/google-play-badge.svg": "/static/media/google-play-badge.cfea2442.svg",
     "static/media/happy-fave.svg": "/static/media/happy-fave.624ff369.svg",
@@ -47,7 +48,7 @@
     "static/js/runtime-main.7bc62397.js",
     "static/css/2.d63266c2.chunk.css",
     "static/js/2.bdf978ba.chunk.js",
-    "static/css/main.d381faa3.chunk.css",
-    "static/js/main.a33aba11.chunk.js"
+    "static/css/main.ec63e9d9.chunk.css",
+    "static/js/main.9217800f.chunk.js"
   ]
 }

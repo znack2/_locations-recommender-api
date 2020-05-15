@@ -233,14 +233,33 @@ async function searchLocations(name) //categories
 //get location info by hashtag in location4
 async function searchLocations4(selectedTag,categoryId) 
 {
-  // const conditions = categories.map((category) => ({
-  //   match: {
-  //     "type": category
-  //   },
-  // }));
+  var conditions = []
 
-  // console.log('conditions',conditions);
+  if(categoryId == '0'){
+    conditions = [
+       {
+          "term": {
+             "mainkeyword": selectedTag
+            
+          }
+       }
+    ]
+  } else {
+      conditions = [{
+          "term": {
+            "category": categoryId
+          }
+        },
+        {
+          "term": {
+             "mainkeyword": selectedTag
+            
+          }
+        }
+    ]
+  }
 
+  console.log('conditions',conditions)
   console.log('selectedTag',selectedTag)
   console.log('categoryId',categoryId)
 
@@ -249,7 +268,7 @@ async function searchLocations4(selectedTag,categoryId)
       index: "locations4",
       body: {
         from:0,
-        size:40,
+        size:50,
         query: {
           // "dis_max": {
           //   "queries": [
@@ -267,18 +286,7 @@ async function searchLocations4(selectedTag,categoryId)
             //     "category": categoryId,
             //   },
             // }
-            "must": [
-              {
-                "term": {
-                  "mainkeyword": selectedTag
-                }
-              },
-              {
-                "term": {
-                  "category": categoryId
-                }
-              }
-            ],
+            "must": conditions,
           },
         },
       },

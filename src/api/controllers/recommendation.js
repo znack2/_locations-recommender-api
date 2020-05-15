@@ -12,13 +12,13 @@ var {image_search} = require("duckduckgo-images-api");
 // var rp = require('request-promise');
 
 const { getHashes } = require('../modules/tags');
+const { getPosts } = require('../modules/posts');
 
 // const { getUserPreferences } = require('../../controllers/user');
 
 const { 
-  searchLocations,
-  searchLocations4,
-  searchPosts
+  // searchLocations,
+  searchLocations4
 } = require('../../services/elasticService');
 
 
@@ -107,21 +107,7 @@ module.exports = {
                 //   }
                 // };
 
-                async function getPosts (location, callback){
-                  if(location.maintag && location.maintag !== undefined || location.maintag_2 && location.maintag_2 !== undefined){
-                  // if(location.website && location.website !== undefined){
-                    var posts = await searchPosts([location.maintag]);//location.maintag_2
-
-                    const result = posts.filter(post => !post.insta_description.includes('доктор'))
-                         .map(post => {return post.display_url});
-
-                    // console.log('posts_result',result);
-
-                    result.push(location.img)
-
-                    callback(result);
-                  }
-                };
+                
 
                 // async function checkResource(post){//const functionName = async post => 
                 //   var photoArray = [];
@@ -183,6 +169,9 @@ module.exports = {
                 const result = []
 
                 for (var i = locationData.length - 1; i >= 0; i--) {
+
+                  var postsData = await new Promise(resolve => getPosts(locationData[i], result => resolve(result)))
+
                   result.push(Object.assign(locationData[i], {
                     mainphoto: locationData[i].img,
                     // photo: [
@@ -190,19 +179,20 @@ module.exports = {
                     //   'https://scontent-frt3-1.cdninstagram.com/v/t51.2815-15/sh0.08/e35/c0.180.1440.1440a/s640x640/67451683_1162223687313525_9073398506671709435_n.jpg?_nc_ht=scontent-frt3-1.cdninstagram.com&_nc_cat=109&_nc_ohc=Scb_MV4TUHoAX-GSCkD&oh=d8c6f3e221e8fa94129461d871bbc958&oe=5EC97B45'
                     // ],
                     // photo: photos.length != null ? photos.filter(Boolean) : PhotoData.photo,
-                    photo: await new Promise(resolve => getPosts(locationData[i], result => resolve(result)))
+                    posts: postsData
                     // photo: posts.length != null ? posts.filter(post => !post.insta_description.includes('доктор')).map(post => post.display_url) : PhotoData.photo,
                     // mainphoto: PhotoData.photo,
                     // description: description
                   }))
                 }
 
+                console.log('result.length',result.length)
+
                 return result
 
-                console.log('result',result)
-                console.log('result.length',result.length)
-                console.log('--------------')
-                console.log(die)
+                // console.log('result',result)
+                // console.log('--------------')
+                // console.log(die)
             // }
           }
 
@@ -237,6 +227,7 @@ module.exports = {
           const test = flatArray.filter(Boolean).map((item) => {
             if(item != null){
              return Object.assign(
+              {random: filteredHashes['categoryId'] == '0' ? true : false},
               {latitude: item.lat}, 
               {longitude: item.lon}, 
               {googleLink: 'https://www.google.com/maps/place/'+ item.address.trim() +'/@'+ item.lat + ',' + item.lon},
@@ -285,15 +276,18 @@ module.exports = {
 
             // const open = checkTime(location.item.workhours)
 
-            console.log('storage_contain',storage.includes(location.item.name));
+            // console.log('storage_contain',storage.includes(location.item.name));
+            // console.log('storage_contain',location.item.name);
 
-            var already = storage.includes(location.item.name)
+            const already = storage.includes(location.item.name)
 
-            // || open
-            if(location != null && location.item.photo != undefined && location.item.photo.length != 0 && already === false){
-              console.log('storage_before',storage.length);
+            // console.log('already',already);
+
+            // || open && location.item.photo != undefined && location.item.photo.length != 0 && 
+            if(location != null && already === false){
+              // console.log('storage_before',storage.length);
               storage.push(location.item.name)
-              console.log('storage_after',storage.length);
+              // console.log('storage_after',storage.length);
               return location
             }else{
               return false
@@ -305,10 +299,11 @@ module.exports = {
           //random
           function randCol(final) {
             var colArr = [];
-            for (var i = 0; i < 6; i++) {
+            for (var i = 0; i < 5; i++) {
              //get only ONE random element
               var rand = final[Math.floor(Math.random() * final.length)];
-              if(rand != null){
+              if(rand != null && !colArr.includes(rand)){
+                // console.log('rand',rand);
                 colArr.push(rand);
               }
             }
@@ -316,6 +311,8 @@ module.exports = {
           }
 
           const result = randCol(final);
+
+          // console.log('result',result);
 
           //distance
           const opts = {
@@ -327,9 +324,9 @@ module.exports = {
 
           if(currentLocation != null && result != null){
 
-            result.map(element => console.log('before',element.item.name))
+            result.map(element => console.log('before_sortByDistance',element.item.name))
             finalresult = sortByDistance(currentLocation, result, opts)
-            finalresult.map(element => console.log('after',element.item.name))
+            finalresult.map(element => console.log('after_sortByDistance',element.item.name))
 
           }else{
             finalresult = result
