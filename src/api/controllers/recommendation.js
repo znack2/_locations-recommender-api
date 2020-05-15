@@ -227,6 +227,7 @@ module.exports = {
           const test = flatArray.filter(Boolean).map((item) => {
             if(item != null){
              return Object.assign(
+              {tags: filteredHashes['tags']},
               {random: filteredHashes['categoryId'] == '0' ? true : false},
               {latitude: item.lat}, 
               {longitude: item.lon}, 

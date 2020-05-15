@@ -1,31 +1,35 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "f15ccae88f602ee58db0e24df3611b84",
+    "revision": "60711d5b091e11f76130c60c900640e9",
     "url": "/index.html"
   },
   {
-    "revision": "bf902db749980a4f19ef",
-    "url": "/static/css/2.d63266c2.chunk.css"
+    "revision": "fc226480f7c00dea6d43",
+    "url": "/static/css/2.555c8e5b.chunk.css"
   },
   {
-    "revision": "4bf231cf4421fae2d9c0",
-    "url": "/static/css/main.ec63e9d9.chunk.css"
+    "revision": "01585fa5fb0cf4ccc8d3",
+    "url": "/static/css/main.116261d5.chunk.css"
   },
   {
-    "revision": "bf902db749980a4f19ef",
-    "url": "/static/js/2.bdf978ba.chunk.js"
+    "revision": "fc226480f7c00dea6d43",
+    "url": "/static/js/2.96771784.chunk.js"
   },
   {
     "revision": "24bb84a7895da351d4bf6494a07081d0",
-    "url": "/static/js/2.bdf978ba.chunk.js.LICENSE.txt"
+    "url": "/static/js/2.96771784.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "4bf231cf4421fae2d9c0",
-    "url": "/static/js/main.9217800f.chunk.js"
+    "revision": "01585fa5fb0cf4ccc8d3",
+    "url": "/static/js/main.c6b877fa.chunk.js"
   },
   {
     "revision": "02906178b62da6161dd5",
     "url": "/static/js/runtime-main.7bc62397.js"
+  },
+  {
+    "revision": "dc19df25659007e0e50030f55c650be0",
+    "url": "/static/media/01.dc19df25.gif"
   },
   {
     "revision": "8b7d87b8888e8ad5f6c5ad05dc28134b",
@@ -108,10 +112,6 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/media/confirm.474dbb16.svg"
   },
   {
-    "revision": "3a6c970218f0e911debaa26aa80d0bf9",
-    "url": "/static/media/defaultBg.3a6c9702.jpg"
-  },
-  {
     "revision": "176e8de43d08828231bc2607d9d72935",
     "url": "/static/media/foundation_sound.176e8de4.svg"
   },
@@ -126,6 +126,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "958b0f80d1c584f00096fed9609a855a",
     "url": "/static/media/ic_round-remove-red-eye.958b0f80.svg"
+  },
+  {
+    "revision": "18543fa6425987ef0f247532f2a88309",
+    "url": "/static/media/icon.18543fa6.svg"
   },
   {
     "revision": "3e3abb2ff9e1ba578dd64f43805db460",

@@ -252,25 +252,27 @@ async function getHashes (userId, categoryId){
     
     //1) get from db tags 
     result = await models.userPreferences.find({ userId }, ['preference'])
-      .then(preferences => preferences.map(({ preference }) => checkExistTag(preference)));
+      .then(preferences => preferences.map(({ preference }) => checkExistTag(preference)).filter(Boolean));
 
     console.log('result',result)
 
 
     //3) if not found any tag
-    function randCol(final) {
+    function randCol(arr) {
       var colArr = [];
       for (var i = 0; i < 3; i++) {
        //get only ONE random element
-        var rand = final[Math.floor(Math.random() * final.length)];
+        var rand = arr[Math.floor(Math.random() * arr.length)];
         if(rand != null && !colArr.includes(rand)){
           colArr.push(rand);
         }
       }
       return colArr;
     }
+
+    console.log('check if not found',result)
     
-    if(result.length[0] == undefined){
+    if(result.length == 0){
       result = randCol(random);
       categoryId = '0';
       console.log('result if nothing',result)
