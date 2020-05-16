@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.116261d5.chunk.css",
-    "main.js": "/static/js/main.c6b877fa.chunk.js",
-    "main.js.map": "/static/js/main.c6b877fa.chunk.js.map",
+    "main.css": "/static/css/main.7cb98763.chunk.css",
+    "main.js": "/static/js/main.0ac06298.chunk.js",
+    "main.js.map": "/static/js/main.0ac06298.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.7bc62397.js",
     "runtime-main.js.map": "/static/js/runtime-main.7bc62397.js.map",
     "static/css/2.555c8e5b.chunk.css": "/static/css/2.555c8e5b.chunk.css",
-    "static/js/2.96771784.chunk.js": "/static/js/2.96771784.chunk.js",
-    "static/js/2.96771784.chunk.js.map": "/static/js/2.96771784.chunk.js.map",
+    "static/js/2.96f9d256.chunk.js": "/static/js/2.96f9d256.chunk.js",
+    "static/js/2.96f9d256.chunk.js.map": "/static/js/2.96f9d256.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.b551522eed2b1d187019dda1507b9d03.js": "/precache-manifest.b551522eed2b1d187019dda1507b9d03.js",
+    "precache-manifest.6dade1ba11188a75510ce09da4b05281.js": "/precache-manifest.6dade1ba11188a75510ce09da4b05281.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.555c8e5b.chunk.css.map": "/static/css/2.555c8e5b.chunk.css.map",
-    "static/css/main.116261d5.chunk.css.map": "/static/css/main.116261d5.chunk.css.map",
-    "static/js/2.96771784.chunk.js.LICENSE.txt": "/static/js/2.96771784.chunk.js.LICENSE.txt",
+    "static/css/main.7cb98763.chunk.css.map": "/static/css/main.7cb98763.chunk.css.map",
+    "static/js/2.96f9d256.chunk.js.LICENSE.txt": "/static/js/2.96f9d256.chunk.js.LICENSE.txt",
     "static/media/index.css": "/static/media/01.dc19df25.gif",
     "static/media/blank.module.css": "/static/media/iphone_6_plus_white_port.3e3abb2f.png",
     "static/media/app-store-badge.svg": "/static/media/app-store-badge.d0558d91.svg",
@@ -36,10 +36,11 @@
     "static/media/google-play-badge.svg": "/static/media/google-play-badge.cfea2442.svg",
     "static/media/happy-fave.svg": "/static/media/happy-fave.624ff369.svg",
     "static/media/ic_round-remove-red-eye.svg": "/static/media/ic_round-remove-red-eye.958b0f80.svg",
-    "static/media/icon.svg": "/static/media/icon.18543fa6.svg",
+    "static/media/icon.svg": "/static/media/icon.4f955e6c.svg",
     "static/media/mdi_brain.svg": "/static/media/mdi_brain.e75e4f8f.svg",
     "static/media/sad-face.svg": "/static/media/sad-face.b6224192.svg",
     "static/media/screen.png": "/static/media/screen.baeae1df.png",
+    "static/media/share.svg": "/static/media/share.9dc3f608.svg",
     "static/media/si-glyph_spoon-fork.svg": "/static/media/si-glyph_spoon-fork.e4f22442.svg",
     "static/media/slick-theme.css": "/static/media/slick.f97e3bbf.svg",
     "static/media/success.module.css": "/static/media/white-bg.b5c1c279.svg"
@@ -47,8 +48,8 @@
   "entrypoints": [
     "static/js/runtime-main.7bc62397.js",
     "static/css/2.555c8e5b.chunk.css",
-    "static/js/2.96771784.chunk.js",
-    "static/css/main.116261d5.chunk.css",
-    "static/js/main.c6b877fa.chunk.js"
+    "static/js/2.96f9d256.chunk.js",
+    "static/css/main.7cb98763.chunk.css",
+    "static/js/main.0ac06298.chunk.js"
   ]
 }

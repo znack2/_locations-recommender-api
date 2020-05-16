@@ -15,6 +15,8 @@ module.exports = {
     app.use((req, res, next) => {
       res.set('Access-Control-Allow-Origin', '*');
       res.set('Access-Control-Allow-Headers', '*');
+      res.set('Access-Control-Allow-Methods', '*');
+      // headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
       next();
     });
 

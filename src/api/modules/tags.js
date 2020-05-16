@@ -254,7 +254,7 @@ async function getHashes (userId, categoryId){
     result = await models.userPreferences.find({ userId }, ['preference'])
       .then(preferences => preferences.map(({ preference }) => checkExistTag(preference)).filter(Boolean));
 
-    console.log('result',result)
+    // console.log('result',result)
 
 
     //3) if not found any tag

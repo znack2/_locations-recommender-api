@@ -30,14 +30,14 @@ async function getPosts (location, callback){
                         .filter(post => !stopWords(post.insta_description))
                         .map(post => {
                           const already = storage.includes(post.display_url)
-                          console.log('already',already);
+                          // console.log('already',already);
                           // console.log('photo_storage_before',storage.length);
                           if(already === false){
                             storage.push(post.display_url)
                             // console.log('photo_storage_after',storage.length);
                             return {
                               photo: post.display_url,
-                              post: post.insta_description
+                              post: post.insta_description.replace('&quot;','')
                             }
                           }
                         });

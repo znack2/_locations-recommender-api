@@ -41,6 +41,14 @@ module.exports = {
       //   throw new ApiError('USERNAME_AND_PASSWORD_REQUIRED');
       // }
 
+      const code = req.body && req.body.code ? req.body.code : undefined;
+
+      console.log('code',code)
+
+      if (!code) {
+        throw new ApiError('AUTHORIZATION_CODE_REQUIRED');
+      }
+
       var user = {
         id: Math.floor(Math.random() * 100),//Date.now(),
         username: '_' + Math.random().toString(36).substr(2, 9)

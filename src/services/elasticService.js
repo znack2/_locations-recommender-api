@@ -103,7 +103,7 @@ async function searchPosts(maintags) {
     },
   }));  
   
-  console.log('searchPosts',maintags);
+  // console.log('searchPosts',maintags);
 
   const { body } = await client.search(
     {
@@ -259,16 +259,16 @@ async function searchLocations4(selectedTag,categoryId)
     ]
   }
 
-  console.log('conditions',conditions)
-  console.log('selectedTag',selectedTag)
-  console.log('categoryId',categoryId)
+  // console.log('conditions',conditions)
+  // console.log('selectedTag',selectedTag)
+  // console.log('categoryId',categoryId)
 
   const { body } = await client.search(
     {
       index: "locations4",
       body: {
         from:0,
-        size:50,
+        size:30,
         query: {
           // "dis_max": {
           //   "queries": [

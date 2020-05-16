@@ -32,6 +32,8 @@ module.exports = {
       const { userId } = req.session;
       const { preference } = req.body;
 
+      console.log('addUserPreference','preferences',preference);
+
       if (!preference || typeof preference !== 'string') {
         throw new ApiError('INVALID_PREFERENCE');
       }
@@ -51,6 +53,8 @@ module.exports = {
     try {
       const { userId } = req.session;
       const { preferences } = req.body;
+
+      console.log('removeUserPreferences','preferences',preferences);
 
       if (!preferences) {
         throw new ApiError('INVALID_PREFERENCE');

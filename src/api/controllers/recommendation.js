@@ -42,7 +42,7 @@ module.exports = {
 
       const filteredHashes = await getHashes(userId,categoryId);
 
-      console.log('filteredHashes',filteredHashes)
+      // console.log('filteredHashes',filteredHashes)
 
       var finalresult = []
 
@@ -300,7 +300,7 @@ module.exports = {
           //random
           function randCol(final) {
             var colArr = [];
-            for (var i = 0; i < 5; i++) {
+            for (var i = 0; i < 30; i++) {
              //get only ONE random element
               var rand = final[Math.floor(Math.random() * final.length)];
               if(rand != null && !colArr.includes(rand)){
@@ -325,9 +325,9 @@ module.exports = {
 
           if(currentLocation != null && result != null){
 
-            result.map(element => console.log('before_sortByDistance',element.item.name))
+            // result.map(element => console.log('before_sortByDistance',element.item.name))
             finalresult = sortByDistance(currentLocation, result, opts)
-            finalresult.map(element => console.log('after_sortByDistance',element.item.name))
+            // finalresult.map(element => console.log('after_sortByDistance',element.item.name))
 
           }else{
             finalresult = result
