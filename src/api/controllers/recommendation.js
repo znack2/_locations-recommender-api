@@ -306,7 +306,7 @@ module.exports = {
           //random
           function randCol(final) {
             var colArr = [];
-            for (var i = 0; i < 60; i++) {
+            for (var i = 0; i < 6; i++) {
              //get only ONE random element
               var rand = final[Math.floor(Math.random() * final.length)];
               if(rand != null && !colArr.includes(rand)){

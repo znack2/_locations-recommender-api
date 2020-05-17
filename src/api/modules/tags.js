@@ -48,7 +48,7 @@ const random = [
 
 categories[1] = {
   //Быстрое питание
-  'ресторан':['кухня','есть','еда','eat','ресторан','кафе','wifi','Дегустация','Готовка','Кулинария'],
+  'ресторан':['кухня','есть','еда','eat','ресторан','кафе','wifi','дегустация','готовка','кулинария'],
   'фастфуд':['кола', 'спрайт', 'пепси', 'чипсы', 'фри', 'McDonald', 'мак', 'King', 'pepsi', 'cola', 'cocacola', 'coca-cola','sprite','fanta','пиццерия','пицца','pizza','Быстрое питание','фастфуд','шаурма'],
   'кофе':['кофе','кофейня','starbucks','капучино', 'cappuccino', 'латте', 'завтраки', 'coffee', 'cafe', 'americano', 'espresso', 'mocha', 'arabica', 'frappe', 'лавацца', 'lavazza', 'бариста','старбакс','капуч', 'капичинно'],
   'пиво':['пиво', 'разливное', 'выпить','ale','эль','heineken','ипа','ipa','guinness','lager','pilsner','stella','draft', 'сидер', 'cider', 'beer', 'bar', 'pub'],
@@ -64,7 +64,7 @@ categories[2] = {
   'клуб':['ночной', 'дискотек', 'коктели', 'бухло', 'party', 'club', 'вечеринк', 'баб', 'пат','клуб','sex','секс'],
   'караоке':['пение', 'вокал', 'karaoke', 'караоке'],
   // sit
-  'концерт':['шоу', 'opera', 'концерт', 'выступление', 'оркестр','рок','панк','rock','Концертный зал','concert','чайковский'],
+  'концерт':['шоу', 'opera', 'концерт', 'выступление', 'оркестр','рок','панк','rock','концертный зал','concert','чайковский'],
   'живаямузыка':['живая музыка','музыканты','джаз','livemusic','музыка','гитара']
 }
 //see
@@ -239,7 +239,7 @@ async function getHashes (userId, categoryId){
       //go through each categories and search by tag
       for (var i = categories.length - 1; i >= 1; i--) {
         var object = categories[i]
-        res = Object.keys(object).find(key => object[key].includes(preference));
+        res = Object.keys(object).find(key => object[key].includes(preference.toLowerCase()));
         //if find 
         if(res != undefined){
           console.log('checkExistTag',res)

@@ -271,7 +271,7 @@ async function searchLocations4(selectedTag,categoryId)
       index: "locations4",
       body: {
         from:0,
-        size:60,
+        size:30,
         query: {
           // "dis_max": {
           //   "queries": [
