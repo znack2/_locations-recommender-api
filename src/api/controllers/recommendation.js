@@ -223,10 +223,14 @@ module.exports = {
             throw new ApiError('LOCATIONS_EMPTY');
           }
 
+          // console.log('flatArray',flatArray);
+
           //format return data
           const test = flatArray.filter(Boolean).map((item) => {
             if(item != null){
              return Object.assign(
+              {userRate:false},//-----> TODO_1 = USER RATING 
+              {userValue:1},
               {tags: filteredHashes['tags']},
               {random: filteredHashes['categoryId'] == '0' ? true : false},
               {latitude: item.lat}, 
@@ -282,10 +286,12 @@ module.exports = {
 
             const already = storage.includes(location.item.name)
 
-            // console.log('already',already);
+            const badPlaces = ['mandarin','акапелла','Ресторан-караоке Vintaж77','Music Point',"G'arbuz",'Караоке-бар Song']
+
+            const stop = badPlaces.includes(location.item.name)
 
             // || open && location.item.photo != undefined && location.item.photo.length != 0 && 
-            if(location != null && already === false){
+            if(location != null && already === false && stop === false){
               // console.log('storage_before',storage.length);
               storage.push(location.item.name)
               // console.log('storage_after',storage.length);
@@ -300,7 +306,7 @@ module.exports = {
           //random
           function randCol(final) {
             var colArr = [];
-            for (var i = 0; i < 30; i++) {
+            for (var i = 0; i < 60; i++) {
              //get only ONE random element
               var rand = final[Math.floor(Math.random() * final.length)];
               if(rand != null && !colArr.includes(rand)){

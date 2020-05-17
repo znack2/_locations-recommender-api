@@ -50,7 +50,7 @@ module.exports = {
       }
 
       var user = {
-        id: Math.floor(Math.random() * 100),//Date.now(),
+        id: Math.floor(Math.random() * 5000),//Date.now(),
         username: '_' + Math.random().toString(36).substr(2, 9)
       };
 

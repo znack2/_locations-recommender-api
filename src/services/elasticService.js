@@ -235,6 +235,9 @@ async function searchLocations4(selectedTag,categoryId)
 {
   var conditions = []
 
+  //REMOVE AFTER ALL
+  categoryId = selectedTag === 'театр' ? 3 : categoryId
+
   if(categoryId == '0'){
     conditions = [
        {
@@ -268,7 +271,7 @@ async function searchLocations4(selectedTag,categoryId)
       index: "locations4",
       body: {
         from:0,
-        size:30,
+        size:60,
         query: {
           // "dis_max": {
           //   "queries": [
@@ -310,8 +313,7 @@ async function searchLocations4(selectedTag,categoryId)
     // mainkeyword: 'вино',
     // img: 'https://mir-s3-cdn-cf.behance.net/project_modules/1400/709fbb78641003.5ced7825c4286.png'
           
-  // console.log('search',body);
-  return body.hits.hits.map(({_source}) => _source);
+  return body.hits.hits.map(({_id,_source}) => { _source.id = parseInt(_id); return _source});
 }
 
 module.exports = { 
