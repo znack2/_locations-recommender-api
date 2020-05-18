@@ -286,7 +286,7 @@ module.exports = {
 
             const already = storage.includes(location.item.name)
 
-            const badPlaces = ['mandarin','акапелла','Ресторан-караоке Vintaж77','Music Point',"G'arbuz",'Караоке-бар Song']
+            const badPlaces = ['Mandarin','Акапелла','Ресторан-караоке Vintaж77','Music Point',"G'arbuz",'Караоке-бар Song','Суперия']
 
             const stop = badPlaces.includes(location.item.name)
 

@@ -1,25 +1,24 @@
 {
   "files": {
-    "main.css": "/static/css/main.46a36a7b.chunk.css",
-    "main.js": "/static/js/main.f02a669e.chunk.js",
-    "main.js.map": "/static/js/main.f02a669e.chunk.js.map",
+    "main.css": "/static/css/main.09beccd4.chunk.css",
+    "main.js": "/static/js/main.51cfe8f5.chunk.js",
+    "main.js.map": "/static/js/main.51cfe8f5.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.7bc62397.js",
     "runtime-main.js.map": "/static/js/runtime-main.7bc62397.js.map",
     "static/css/2.555c8e5b.chunk.css": "/static/css/2.555c8e5b.chunk.css",
-    "static/js/2.a107ff3d.chunk.js": "/static/js/2.a107ff3d.chunk.js",
-    "static/js/2.a107ff3d.chunk.js.map": "/static/js/2.a107ff3d.chunk.js.map",
+    "static/js/2.bd311141.chunk.js": "/static/js/2.bd311141.chunk.js",
+    "static/js/2.bd311141.chunk.js.map": "/static/js/2.bd311141.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.199e5e1eed55d9ef6eff199c2992c9a7.js": "/precache-manifest.199e5e1eed55d9ef6eff199c2992c9a7.js",
+    "precache-manifest.4f33b402084a6b8208a8fe9beb45c67e.js": "/precache-manifest.4f33b402084a6b8208a8fe9beb45c67e.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.555c8e5b.chunk.css.map": "/static/css/2.555c8e5b.chunk.css.map",
-    "static/css/main.46a36a7b.chunk.css.map": "/static/css/main.46a36a7b.chunk.css.map",
-    "static/js/2.a107ff3d.chunk.js.LICENSE.txt": "/static/js/2.a107ff3d.chunk.js.LICENSE.txt",
+    "static/css/main.09beccd4.chunk.css.map": "/static/css/main.09beccd4.chunk.css.map",
+    "static/js/2.bd311141.chunk.js.LICENSE.txt": "/static/js/2.bd311141.chunk.js.LICENSE.txt",
     "static/media/index.css": "/static/media/01.dc19df25.gif",
     "static/media/blank.module.css": "/static/media/iphone_6_plus_white_port.3e3abb2f.png",
+    "static/media/intro.module.css": "/static/media/Neucha-Regular.8e7a91ac.ttf",
     "static/media/app-store-badge.svg": "/static/media/app-store-badge.d0558d91.svg",
     "static/media/arr-pointer.svg": "/static/media/arr-pointer.a8a5992d.svg",
-    "static/media/arr_down.svg": "/static/media/arr_down.5cc418b6.svg",
-    "static/media/arr_up.svg": "/static/media/arr_up.f6a20d4b.svg",
     "static/media/auth.module.css": "/static/media/auth_bg.aa03e2bc.jpg",
     "static/media/auth_logo.png": "/static/media/auth_logo.5eb59e4e.png",
     "static/media/avatar.png": "/static/media/avatar.4fa78f0a.png",
@@ -44,13 +43,14 @@
     "static/media/share.svg": "/static/media/share.9dc3f608.svg",
     "static/media/si-glyph_spoon-fork.svg": "/static/media/si-glyph_spoon-fork.e4f22442.svg",
     "static/media/slick-theme.css": "/static/media/slick.f97e3bbf.svg",
-    "static/media/success.module.css": "/static/media/white-bg.b5c1c279.svg"
+    "static/media/success.module.css": "/static/media/white-bg.b5c1c279.svg",
+    "static/media/swipe2.svg": "/static/media/swipe2.87facd18.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.7bc62397.js",
     "static/css/2.555c8e5b.chunk.css",
-    "static/js/2.a107ff3d.chunk.js",
-    "static/css/main.46a36a7b.chunk.css",
-    "static/js/main.f02a669e.chunk.js"
+    "static/js/2.bd311141.chunk.js",
+    "static/css/main.09beccd4.chunk.css",
+    "static/js/main.51cfe8f5.chunk.js"
   ]
 }

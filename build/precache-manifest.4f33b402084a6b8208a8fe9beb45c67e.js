@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "82fc4febfacfbd0a135ce4e757018738",
+    "revision": "22c5656c6c9dd9c020eb437b2d4348cd",
     "url": "/index.html"
   },
   {
-    "revision": "b0aa12299373fed87aa3",
+    "revision": "b7342cbefd4b592262b9",
     "url": "/static/css/2.555c8e5b.chunk.css"
   },
   {
-    "revision": "cd30ff5e776f969e914a",
-    "url": "/static/css/main.46a36a7b.chunk.css"
+    "revision": "c32b1b735f5c16541005",
+    "url": "/static/css/main.09beccd4.chunk.css"
   },
   {
-    "revision": "b0aa12299373fed87aa3",
-    "url": "/static/js/2.a107ff3d.chunk.js"
+    "revision": "b7342cbefd4b592262b9",
+    "url": "/static/js/2.bd311141.chunk.js"
   },
   {
-    "revision": "14881b97549c6adbba518fe76891a127",
-    "url": "/static/js/2.a107ff3d.chunk.js.LICENSE.txt"
+    "revision": "979816e9e8b05f2b4d198ea75bb44014",
+    "url": "/static/js/2.bd311141.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "cd30ff5e776f969e914a",
-    "url": "/static/js/main.f02a669e.chunk.js"
+    "revision": "c32b1b735f5c16541005",
+    "url": "/static/js/main.51cfe8f5.chunk.js"
   },
   {
     "revision": "02906178b62da6161dd5",
@@ -48,20 +48,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/media/88.3feb3c7d.png"
   },
   {
+    "revision": "8e7a91accfee66949d8f243573b80839",
+    "url": "/static/media/Neucha-Regular.8e7a91ac.ttf"
+  },
+  {
     "revision": "d0558d91063038236b60e3ef71fdc1fd",
     "url": "/static/media/app-store-badge.d0558d91.svg"
   },
   {
     "revision": "a8a5992d5f479928b0f0ff66dad22f6b",
     "url": "/static/media/arr-pointer.a8a5992d.svg"
-  },
-  {
-    "revision": "5cc418b6dea9b66d3c69f87d2ddd06cd",
-    "url": "/static/media/arr_down.5cc418b6.svg"
-  },
-  {
-    "revision": "f6a20d4b7aa4d596ae5d2a0e0de3c795",
-    "url": "/static/media/arr_up.f6a20d4b.svg"
   },
   {
     "revision": "aa03e2bc59a98ca3dd800ed724db40b4",
@@ -186,6 +182,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "a43f19741bbe1c41e44027be4b946606",
     "url": "/static/media/subscribeBg.a43f1974.png"
+  },
+  {
+    "revision": "87facd186c2ce6a2ae9c9251b4225791",
+    "url": "/static/media/swipe2.87facd18.svg"
   },
   {
     "revision": "d810fd02a317e74e6f655055c94ad046",

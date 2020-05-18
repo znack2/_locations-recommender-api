@@ -37,7 +37,7 @@ async function getPosts (location, callback){
                             // console.log('photo_storage_after',storage.length);
                             return {
                               photo: post.display_url,
-                              post: post.insta_description.replace('&quot;','')
+                              text: post.insta_description.replace('&quot;','')
                             }
                           }
                         });
@@ -48,7 +48,7 @@ async function getPosts (location, callback){
     //ADD MAIN IMAGE
     postsData.push({
       photo: location.img,
-      post: location.description
+      text: location.description
     })
 
     //output
