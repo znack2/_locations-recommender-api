@@ -231,12 +231,13 @@ module.exports = {
              return Object.assign(
               {userRate:false},//-----> TODO_1 = USER RATING 
               {userValue:1},
+              {categoryId: filteredHashes['categoryId']},
               {tags: filteredHashes['tags']},
               {random: filteredHashes['categoryId'] == '0' ? true : false},
               {latitude: item.lat}, 
               {longitude: item.lon}, 
               {googleLink: 'https://www.google.com/maps/place/'+ item.address.trim() +'/@'+ item.lat + ',' + item.lon},
-              // {description: item.description}, 
+              {description: item.description}, 
               {positiveReviews: Math.floor(Math.random() * 100)}, //-----> TODO_3 = RATING LOGIC ADD
               {negativeReviews: Math.floor(Math.random() * 100)}, //-----> TODO_3 = RATING LOGIC ADD
               {averageBillUSD: Math.floor(Math.random() * 100)}, //-----> TODO_4 = GET FROM GOOGLE/YANDEX/SITE
