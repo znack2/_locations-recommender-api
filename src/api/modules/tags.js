@@ -274,7 +274,7 @@ async function getHashes (userId, categoryId){
     
     if(result.length == 0){
       result = randCol(random);
-      categoryId = '0';
+      categoryId = 5;
       console.log('result if nothing',result)
     }
 

@@ -238,7 +238,7 @@ async function searchLocations4(selectedTag,categoryId)
   //REMOVE AFTER ALL
   categoryId = selectedTag === 'театр' ? 3 : categoryId
 
-  if(categoryId == '0'){
+  if(categoryId == 5){
     conditions = [
        {
           "term": {

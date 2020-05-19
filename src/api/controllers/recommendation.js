@@ -231,9 +231,8 @@ module.exports = {
              return Object.assign(
               {userRate:false},//-----> TODO_1 = USER RATING 
               {userValue:1},
-              {categoryId: filteredHashes['categoryId']},
+              {categoryId: parseInt(filteredHashes['categoryId'])},
               {tags: filteredHashes['tags']},
-              {random: filteredHashes['categoryId'] == '0' ? true : false},
               {latitude: item.lat}, 
               {longitude: item.lon}, 
               {googleLink: 'https://www.google.com/maps/place/'+ item.address.trim() +'/@'+ item.lat + ',' + item.lon},
