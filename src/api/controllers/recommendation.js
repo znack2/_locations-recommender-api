@@ -46,7 +46,7 @@ module.exports = {
 
       var finalresult = []
 
-      if(filteredHashes['tags'][0] != undefined){
+      if(filteredHashes.length != null && filteredHashes['tags'][0] != undefined){
   
           // function timeout(ms, promise) {
           //   return new Promise(function(resolve, reject) {
@@ -241,7 +241,7 @@ module.exports = {
               {negativeReviews: Math.floor(Math.random() * 100)}, //-----> TODO_3 = RATING LOGIC ADD
               {averageBillUSD: Math.floor(Math.random() * 100)}, //-----> TODO_4 = GET FROM GOOGLE/YANDEX/SITE
               {restriction: null}, //-----> TODO_5 = GET FROM GOOGLE/YANDEX/SITE
-              {numberOfUsersSelectedThisLocation: item.photo != undefined ? item.photo.length : Math.floor(Math.random() * 100)}, 
+              {numberOfUsersSelectedThisLocation: item.photo != undefined ? item.photo.length : Math.floor(Math.random() * (Math.floor(30) - Math.ceil(5)) + Math.ceil(5))}, 
               {lastFiveUsersSelectedThisLocation: [ //-----> TODO_6 = GET REAL USER PHOTOS
                 'https://scontent-hel2-1.cdninstagram.com/v/t51.2885-19/s150x150/95779124_2630482867272359_5467394879912935424_n.jpg?_nc_ht=scontent-hel2-1.cdninstagram.com&_nc_ohc=tOnpI8Z1V1wAX-arPmu&oh=7cc6c7a0d6227aba18a4e1b839aa7fe8&oe=5EDECD91',
                 'https://scontent-hel2-1.cdninstagram.com/v/t51.2885-19/s150x150/95749296_2481761685399011_1388421669617401856_n.jpg?_nc_ht=scontent-hel2-1.cdninstagram.com&_nc_ohc=NKqxKjvWd_MAX8h1t8Z&oh=c628d5f8db79c41a37e47f2b42160b9c&oe=5EDEB129',
@@ -340,8 +340,13 @@ module.exports = {
           }
 
           console.log('finalresult.length',finalresult.length);
+
+          res.json(finalresult);
       } 
-      res.json(finalresult);
+      else {
+        console.log('empty')
+        res.json(finalresult);
+      }
     } catch (error) {
       return next(error);
     }

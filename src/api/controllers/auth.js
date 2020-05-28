@@ -56,10 +56,10 @@ module.exports = {
 
       let dbUser = await models.users.create(user, '*', { onConflictIgnore: true });
 
-      var userId = dbUser.id
-      var preference = ['ресторан','музей','клуб']
+      // var userId = dbUser.id
+      // var preference = ['ресторан','музей','клуб']
 
-      preference.map(preference => models.userPreferences.create({ userId, preference }));
+      // preference.map(preference => models.userPreferences.create({ userId, preference }));
 
       if (!dbUser) {
         [dbUser] = await models.users.update({ id: user.id },{ username: user.username });

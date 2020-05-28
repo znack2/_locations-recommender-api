@@ -229,17 +229,29 @@ async function ElasticTags(){
 
 async function getHashes (userId, categoryId){
 
+    const output_data = []
+
     console.log('getHashes','userId',userId)
     console.log('getHashes','categoryId',categoryId)
     
     //2) find tag in every categories but filter if only categoryId exist!
-    function checkExistTag(preference) {
+    function checkExistTag(preference,categoryId) {
       var res;
 
       //go through each categories and search by tag
       for (var i = categories.length - 1; i >= 1; i--) {
-        var object = categories[i]
-        res = Object.keys(object).find(key => object[key].includes(preference.toLowerCase()));
+
+        if(categoryId){
+          return;
+        }
+
+        if(categoryId){
+          res = categories[categoryId].includes(preference.toLowerCase());
+        } else {
+          var object = categories[i]
+          res = Object.keys(object).find(key => object[key].includes(preference.toLowerCase()));
+        }
+        
         //if find 
         if(res != undefined){
           console.log('checkExistTag',res)
@@ -252,12 +264,11 @@ async function getHashes (userId, categoryId){
     
     //1) get from db tags 
     result = await models.userPreferences.find({ userId }, ['preference'])
-      .then(preferences => preferences.map(({ preference }) => checkExistTag(preference)).filter(Boolean));
+      .then(preferences => preferences.map(({ preference }) => checkExistTag(preference,categoryId)).filter(Boolean));
 
     // console.log('result',result)
 
-
-    //3) if not found any tag
+    //3) if tags exist but not found 
     function randCol(arr) {
       var colArr = [];
       for (var i = 0; i < 3; i++) {
@@ -273,6 +284,7 @@ async function getHashes (userId, categoryId){
     console.log('check if not found',result)
     
     if(result.length == 0){
+      // return output_data
       result = randCol(random);
       categoryId = 5;
       console.log('result if nothing',result)
@@ -315,7 +327,7 @@ async function getHashes (userId, categoryId){
         return Array.from(it);
     } 
 
-    const output_data = []
+    
 
     output_data['tags'] = remove_duplicates_es6(finaltags)
 
