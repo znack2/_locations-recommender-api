@@ -227,7 +227,7 @@ async function ElasticTags(){
 }
 
 
-async function getHashes (userId, categoryId){
+async function getHashes (userId, categoryId, random = false){
 
     const output_data = []
 
@@ -284,8 +284,7 @@ async function getHashes (userId, categoryId){
     console.log('check if not found',result)
     
     if(result.length == 0){
-      // return output_data
-      result = randCol(random);
+      result = random ? randCol(random) : [];
       categoryId = 5;
       console.log('result if nothing',result)
     }

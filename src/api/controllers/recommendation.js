@@ -46,7 +46,7 @@ module.exports = {
 
       var finalresult = []
 
-      if(filteredHashes.length != null && filteredHashes['tags'][0] != undefined){
+      if(filteredHashes.length != null && filteredHashes['tags'].length != null && filteredHashes['tags'][0] != undefined){
   
           // function timeout(ms, promise) {
           //   return new Promise(function(resolve, reject) {
