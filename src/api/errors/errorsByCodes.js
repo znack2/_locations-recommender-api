@@ -12,7 +12,14 @@ module.exports = {
       code: '40001',
       title: 'Tags not found'
     }
-  },  
+  },
+  QUESTION_NOT_FOUND: {
+    statusCode: 404,
+    data: {
+      code: '40004',
+      title: "Question not found"
+    }
+  },
   PERSONALIZE_EMPTY: {
     statusCode: 400,
     data: {

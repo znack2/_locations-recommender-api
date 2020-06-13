@@ -5,7 +5,8 @@ const controllers = {
   auth: require('../../controllers/auth'),
   user: require('../../controllers/user'),
   recommendation: require('../../controllers/recommendation'),
-  rate: require('../../controllers/rate')
+  rate: require('../../controllers/rate'),
+  score: require('../../controllers/score'),
 };
 
 const router = express.Router();
@@ -25,6 +26,11 @@ router.post('/recommendation/select', [authChecker, controllers.recommendation.s
 router.post('/rate/rate', [authChecker, controllers.rate.rate]);
 router.post('/rate/get', [authChecker, controllers.rate.get]);
 router.post('/rate/remove', [authChecker, controllers.rate.remove]);
+
+router.get('/scores', [authChecker, controllers.score.getScore]);
+router.get('/:route_id/:question_id', [authChecker, controllers.score.getQuestion]);
+router.post('/:route_id/:question_id/answer', [authChecker, controllers.score.createAnswer]);
+
 
 module.exports = router;
 

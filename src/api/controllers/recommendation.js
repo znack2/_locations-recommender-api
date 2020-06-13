@@ -23,6 +23,7 @@ const {
 
 
 module.exports = {
+  //TODO: add recommendation by preference
   getRecommendation: async (req, res, next) => {
     try {
       const { userId } = req.session;//categoryId
