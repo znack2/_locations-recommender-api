@@ -4,7 +4,11 @@ exports.up = (pgm) => {
       "id" VARCHAR(50) NOT NULL PRIMARY KEY,
       "username" VARCHAR NOT NULL,
       "score" INTEGER DEFAULT 0,
-      "route_id" INTEGER NOT NULL
+      "current_route_id" INTEGER NOT NULL,
+      "name" VARCHAR NOT NULL,
+      "age" INTEGER NOT NULL,
+       "type_emotion" INTEGER,
+       "target" INTEGER
     );
     
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

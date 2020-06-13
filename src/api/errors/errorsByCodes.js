@@ -1,9 +1,9 @@
 module.exports = {
-  AUTHORIZATION_CODE_REQUIRED: {
+  AUTHORIZATION_ROUTE_ID_REQUIRED: {
     statusCode: 400,
     data: {
       code: '40001',
-      title: 'Authorization code required'
+      title: 'Authorization route_id required'
     }
   },  
   TAG_NOT_FOUND: {
@@ -55,6 +55,13 @@ module.exports = {
       title: 'Invalid authorization code'
     }
   },
+  INVALID_ANSWER: {
+    statusCode: 400,
+    data: {
+      code: '40003',
+      title: 'Invalid answer'
+    }
+  },
   INVALID_PREFERENCE: {
     statusCode: 400,
     data: {
@@ -67,6 +74,13 @@ module.exports = {
     data: {
       code: '40004',
       title: 'Preference already exists'
+    }
+  },
+  ANSWER_ALREADY_EXISTS: {
+    statusCode: 4009,
+    data: {
+      code: '40009',
+      title: 'Answer already exists '
     }
   },
   PREFERENCE_DOESNT_EXIST: {

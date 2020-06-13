@@ -4,9 +4,10 @@ exports.up = (pgm) => {
     "id" BIGSERIAL PRIMARY KEY,
     "question" VARCHAR NOT NULL,
     "answer" VARCHAR NOT NULL,
-    "route_id" VARCHAR(50) NOT NULL,
-    "location" VARCHAR NOT NULL,
-    "coins_value" INTEGER DEFAULT 0
+    "route_id" INTEGER NOT NULL,
+    "location" INTEGER NOT NULL,
+    "coins_value" INTEGER DEFAULT 0,
+    "reference" VARCHAR NOT NULL
     );
     
     CREATE TABLE "answers" (
@@ -18,7 +19,11 @@ exports.up = (pgm) => {
     );
     
     
-    INSERT INTO questions(question,route_id, answer, coins_value) VALUES ('Are you ok?', 'route_id', 'ok', 50);
+    INSERT INTO questions(question,route_id, answer, coins_value, location, reference) VALUES ('Are you ok?', 2, 'ok', 50, 265, 'FOOD');
+    INSERT INTO questions(question,route_id, answer, coins_value, location, reference) VALUES ('It is you name?', 2, 'Peter', 50, 269, 'MUSIC');
+    INSERT INTO questions(question,route_id, answer, coins_value, location, reference) VALUES ('What is happen?', 2, 'Nothing', 50, 260, 'GAME');
+    INSERT INTO questions(question,route_id, answer, coins_value, location, reference) VALUES ('Will you go home?', 2, 'Of course', 50, 255, 'THEATER');
+    INSERT INTO questions(question,route_id, answer, coins_value, location, reference) VALUES ('Did you mean duck?', 2, 'Nope', 50, 257, 'FILMS');
   `);
 };
 
