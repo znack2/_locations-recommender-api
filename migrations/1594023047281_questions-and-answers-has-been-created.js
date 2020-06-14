@@ -19,7 +19,6 @@ exports.up = (pgm) => {
     "route_id" VARCHAR(50) NOT NULL
     );
     
-    
     INSERT INTO questions(question,route_id, correct_answer, coins_value, location, reference, answers) 
     VALUES ('Are you ok?', 2, 'Ok', 50, 265, 'FOOD', ARRAY['Ok', 'No', 'Sure','Oh my...']);
     INSERT INTO questions(question,route_id, correct_answer, coins_value, location, reference, answers) 
