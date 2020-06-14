@@ -79,5 +79,7 @@ module.exports = {
   users: generateModel('users'),
   sessions: generateModel('sessions'),
   ratings: generateModel('ratings'),
-  userPreferences: generateModel('userPreferences')
+  userPreferences: generateModel('userPreferences'),
+  questions: generateModel('questions'),
+  answers: generateModel('answers'),
 };
