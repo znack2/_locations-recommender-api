@@ -48,12 +48,11 @@ module.exports = {
       if (!route_id) {
         throw new ApiError('AUTHORIZATION_ROUTE_ID_REQUIRED');
       }
-
       if ((!name || typeof name !== 'string')
           || (!age || !Number.isInteger(age))
           || (!type_emotion || !Array.isArray(type_emotion) || type_emotion.length > 3)
           || (!target || !Number.isInteger(target))
-          || (!preference || typeof preference !== 'string')) {
+          || (!preference || !Array.isArray(preference) || preference.length > 12)) {
         return res.json({message: "Wrong name,age,type_emotion, preference or target"});
       }
 

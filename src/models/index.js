@@ -82,5 +82,4 @@ module.exports = {
   userPreferences: generateModel('userPreferences'),
   questions: generateModel('questions'),
   answers: generateModel('answers'),
-  ratings: generateModel('ratings'),
 };
