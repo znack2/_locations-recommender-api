@@ -77,7 +77,7 @@ module.exports = {
     }
   },
   ANSWER_ALREADY_EXISTS: {
-    statusCode: 4009,
+    statusCode: 409,
     data: {
       code: '40009',
       title: 'Answer already exists '

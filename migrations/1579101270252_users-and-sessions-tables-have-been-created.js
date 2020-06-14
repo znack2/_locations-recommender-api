@@ -3,12 +3,12 @@ exports.up = (pgm) => {
     CREATE TABLE users (
       "id" VARCHAR(50) NOT NULL PRIMARY KEY,
       "username" VARCHAR NOT NULL,
-      "score" INTEGER DEFAULT 0,
+      "coins_value" INTEGER DEFAULT 0,
       "current_route_id" INTEGER NOT NULL,
       "name" VARCHAR NOT NULL,
       "age" INTEGER NOT NULL,
-       "type_emotion" INTEGER,
-       "target" INTEGER
+      "type_emotion" INTEGER[3],
+      "target" INTEGER
     );
     
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

@@ -51,11 +51,13 @@ module.exports = {
 
       if ((!name || typeof name !== 'string')
           || (!age || !Number.isInteger(age))
-          || (!type_emotion || !Number.isInteger(type_emotion))
+          || (!type_emotion || !Array.isArray(type_emotion) || type_emotion.length > 3)
           || (!target || !Number.isInteger(target))
           || (!preference || typeof preference !== 'string')) {
         return res.json({message: "Wrong name,age,type_emotion, preference or target"});
       }
+
+      const coins_value = Math.round((Math.random() * 15) + 15);
 
       const user = {
         id: Math.floor(Math.random() * 5000),//Date.now(),
@@ -64,7 +66,8 @@ module.exports = {
         name,
         age,
         type_emotion,
-        target
+        target,
+        coins_value
       };
 
       let dbUser = await models.users.create(user, '*', {onConflictIgnore: true});

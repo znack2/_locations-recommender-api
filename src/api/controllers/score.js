@@ -8,9 +8,9 @@ module.exports = {
       const {userId} = req.query;
       let scores;
       if (!userId) {
-        scores = await models.users.find({}, ["id", "score", "username"]);
+        scores = await models.users.find({}, ["id", "coins_value", "username"]);
       } else {
-        scores = await models.users.find({id: userId}, ["id", "score", "username"]);
+        scores = await models.users.find({id: userId}, ["id", "coins_value", "username"]);
       }
       res.json(scores);
     } catch (error) {
@@ -20,7 +20,9 @@ module.exports = {
   getQuestion: async (req, res, next) => {
     try {
       const {route_id, question_id} = req.params;
-      const question = await models.questions.findOne({route_id, id: question_id});
+      const question = await models.questions.findOne(
+          {route_id, id: question_id},
+          ['id','question', 'answers','route_id','location','coins_value','reference']);
       if (!question) {
         return res.json(question);
       }
@@ -48,18 +50,17 @@ module.exports = {
       if (answerDb) {
         throw new ApiError('ANSWER_ALREADY_EXISTS');
       }
-      //TODO: and notification
       const user = await models.users.findOne({id: userId});
       const question = await models.questions.findOne({route_id, id: question_id});
       if (!question) {
         throw new ApiError("QUESTION_NOT_FOUND");
       }
       await models.answers.create({userId: user.id, answer, question_id, route_id});
-      if (question.answer === answer) {
-        await models.users.update({id: userId}, {score: user.score + question.coins_value});
-        return res.json({result: 1, coins_value: question.coins_value});
+      if (question.correct_answer === answer) {
+        await models.users.update({id: userId}, {coins_value: user.coins_value + question.coins_value});
+        return res.json({result: 1, coins_value: question.coins_value, next_question: "19 min"});
       }
-      res.json({result: 0, coins_value: 0});
+      res.json({result: 0, coins_value: 0, next_question: "19 min"});
     } catch (error) {
       next(error);
     }
