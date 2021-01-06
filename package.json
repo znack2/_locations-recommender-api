@@ -6,7 +6,7 @@
   "dependencies": {
     "@elastic/elasticsearch": "^7.6.1",
     "aws-sdk": "^2.657.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.3",
     "config": "^3.3.0",
     "connect-timeout": "^1.9.0",
